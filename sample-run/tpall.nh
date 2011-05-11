@@ -1,0 +1,575 @@
+TP0001              4     1398  +1  chromosomal replication initiator protein (dnaA)
+TP0002           1641     2756  +3  DNA polymerase III, subunit beta (dnaN)
+TP0003           2623     3834  +1  recF protein (recF)
+TP0005           4391     6832  +2  DNA gyrase, subunit A (gyrA)
+TP0006           7014     7181  +3  Tp75 protein
+TP0011          10396    12378  +1  tpr protein B (tprB)
+TP0015          13966    15780  +1  phenylalanyl-tRNA synthetase beta subunit
+TP0016          15743    18316  +2  ATP-dependent protease LA (lon-1)
+TP0018          19418    21391  +2  transcription elongation factor
+TP0019          21558    22046  +3  transcription elongation factor (greA)
+TP0020          22046    24169  +2  76K protein
+TP0023          27557    28888  +2  sodium- and chloride- dependent transporter
+TP0026          33979    32957  -2  flagellar motor switch protein (fliG-1)
+TP0027          34205    35428  +2  hemolysin, putative
+TP0028          35442    36803  +3  hemolysin, putative
+TP0029          36911    38188  +2  UDP-N-acetylglucosamine 1-carboxyvinyltransferase
+TP0030          38307    39941  +3  chaperonin GroEL
+TP0034          42739    41789  -2  ABC transporter, periplasmic binding protein
+TP0035          42937    43653  +1  ABC transporter, ATP-binding protein
+TP0036          43653    44453  +3  ABC transporter, permease protein
+TP0037          45557    44562  -3  D-specific D-2-hydroxyacid dehydrogenase
+TP0038          46706    45654  -3  regulatory protein (pfoS/R)
+TP0040          47591    49384  +2  methyl-accepting chemotaxis protein (mcp1)
+TP0043          50418    52550  +3  soluble lytic transglycosylase, putative
+TP0044          52590    54482  +3  glucose-inhibited division protein A
+TP0045          55437    54538  -1  adenosine deaminase
+TP0051          59578    60633  +1  peptide chain release factor 1 (prfA)
+TP0052          60603    61649  +3  protoporphyrinogen oxidase (hemK)
+TP0053          62793    61738  -1  ribonucleotide-diphosphate reductase beta subunit
+TP0056          64363    66144  +1  oxaloacetate decarboxylase
+TP0057          66156    67565  +3  oxaloacetate decarboxylase, subunit beta (oadB)
+TP0058          68956    67640  -2  replicative DNA helicase (dnaB)
+TP0060          69643    69173  -2  ribosomal protein L9 (rplI)
+TP0061          70048    69749  -2  ribosomal protein S18 (rpsR)
+TP0062          70695    70165  -1  single-strand DNA binding protein (ssb)
+TP0063          70985    70704  -3  ribosomal protein S6 (rpsF)
+TP0071          78542    75906  -3  ATP-dependent Clp protease subunit B (clpB)
+TP0074          80934    82343  +3  sugar ABC transporter, periplasmic binding protein (y4oP)
+TP0075          82462    83352  +1  sugar ABC transporter, permease protein (y4oQ)
+TP0076          83392    84213  +1  sugar ABC transporter, permease protein (y4oR)
+TP0077          84254    85870  +2  capsular polysaccharide biosynthesis protein (cap5D)
+TP0078          85875    87113  +3  spore coat polysaccharide biosynthesis protein (spsC)
+TP0080          89260    89727  +1  quinoline 2-oxidoreductase
+TP0082          92431    90629  -2  formate hydrogenlyase transcriptional activator (fhlA)
+TP0085          95230    94784  -2  PTS system, nitrogen regulatory IIA component (ptsN-1)
+TP0089          98660    97425  -3  cyclic nucleotide binding protein
+TP0090          99807    98743  -1  UDP-N-acetylmuramate dehydrogenase (murB)
+TP0091          99989   101551  +2  cysteinyl-tRNA synthetase (cysS)
+TP0092         101622   102110  +3  RNA polymerase sigma-24 factor (rpoE)
+TP0094         102879   103889  +3  phosphate acetyltransferase (pta)
+TP0096         106271   105909  -3  dnaK suppressor, putative
+TP0097         106441   106659  +1  translation initiation factor 1 (infA)
+TP0098         107369   106719  -3  heat-shock protein, putative
+TP0099         108128   107373  -3  uridylate kinase
+TP0100         108323   108925  +2  thioredoxin, putative
+TP0101         108918   109712  +3  cytochrome c biogenesis protein (ccdA)
+TP0102         111723   109750  -1  rep helicase, single-stranded DNA-dependent ATPase (rep)
+TP0103         111788   113611  +2  ATP-dependent DNA helicase, putative
+TP0104         113858   115639  +2  5'-nucleotidase (ushA)
+TP0105         115806   118799  +3  DNA polymerase I (polA)
+TP0106         120363   118831  -1  carnitine transporter, putative
+TP0107         121921   120344  -2  licC protein (licC)
+TP0108         123660   122275  -1  diphosphate--fructose-6-phosphate 1-phosphotransferase
+TP0109         124640   123762  -3  rRNA methylase, putative
+TP0112         129750   128398  -1  aminopeptidase C (pepC)
+TP0111         126974   128401  +2  RNA polymerase sigma-54 factor (rpoN)
+TP0113         129892   130878  +1  Lambda CII stability-governing protein (hflK)
+TP0114         130883   131878  +2  Lambda CII stability-governing protein (hflC)
+TP0115         132712   131903  -2  phosphomethypyrimidine kinase (thiD)
+TP0116         132863   134869  +2  excinuclease ABC subunit B
+TP0117         136697   134901  -3  tpr protein C (tprC)
+TP0119         138799   138140  -2  amino acid ABC transporter, permease protein (yaeE)
+TP0120         139608   138799  -1  amino acid ABC transporter, ATP-binding protein (abc)
+TP0122         142881   141025  -1  phosphoenolpyruvate carboxykinase (GTP)
+TP0125         146754   147548  +3  exodeoxyribonuclease (exoA)
+TP0131         152897   151101  -3  tpr protein D (tprD)
+TP0140         161737   160010  -2  K+ transport protein (ntpJ)
+TP0142         163055   162393  -3  thiamine ABC transporter, ATP-binding protein, putative
+TP0141         161909   162442  +2  methylated-DNA-protein-cysteine S-methyltransferase (dat)
+TP0143         164829   163048  -1  thiamine ABC transporter, permease protein, putative
+TP0144         165794   164787  -3  thiamine ABC transporter, thiamine-binding periplasmic protein, putative
+TP0145         165904   167874  +1  long-chain-fatty-acid--CoA ligase
+TP0147         171138   169279  -1  alpha-amylase 1, putative
+TP0152         175294   173750  -2  nitrogen fixation protein (rnfC)
+TP0160         183272   181419  -3  prolyl-tRNA synthetase
+TP0162         184436   183384  -3  Holliday junction DNA helicase RuvB
+TP0163         184611   185537  +3  ABC transporter, periplasmic binding protein (troA)
+TP0164         185685   186485  +3  ABC transporter, ATP-binding protein (troB)
+TP0165         186457   187353  +1  ABC transporter, permease protein (troC)
+TP0166         187357   188460  +1  ABC transporter, permease protein (troD)
+TP0167         188470   188931  +1  cation-activated repressor protein (troR)
+TP0168         189011   189766  +2  phosphoglycerate mutase (pgm)
+TP0170         190085   190894  +2  pfs protein (pfs)
+TP0171         190994   191422  +2  lipoprotein, 15 kDa (tpp15)
+TP0184         200927   200523  -3  SsrA-binding protein
+TP0185         201075   201782  +3  signal peptidase I (sip)
+TP0186         201837   203018  +3  oxygen-independent coproporphyrinogen III oxidase, putative
+TP0187         203082   204569  +3  translation elongation factor TU (tuf)
+TP0188         204641   204949  +2  30S ribosomal protein S10
+TP0189         204996   205622  +3  ribosomal protein L3 (rplC)
+TP0190         205636   206286  +1  50S ribosomal protein L4
+TP0191         206273   206557  +2  ribosomal protein L23 (rplW)
+TP0192         206613   207434  +3  50S ribosomal protein L2
+TP0193         207444   207731  +3  ribosomal protein S19 (rpsS)
+TP0194         207740   208114  +2  50S ribosomal protein L22
+TP0195         208098   208841  +3  30S ribosomal protein S3
+TP0196         208845   209264  +3  50S ribosomal protein L16
+TP0197         209279   209497  +2  ribosomal protein L29 (rpmC)
+TP0198         209512   209766  +1  ribosomal protein S17 (rpsQ)
+TP0199         209779   210147  +1  50S ribosomal protein L14
+TP0200         210159   210470  +3  ribosomal protein L24 (rplX)
+TP0201         210467   211024  +2  ribosomal protein L5 (rplE)
+TP0202         211036   211221  +1  ribosomal protein S14 (rpsN)
+TP0203         211237   211635  +1  30S ribosomal protein S8
+TP0204         211645   212184  +1  50S ribosomal protein L6
+TP0205         212193   212555  +3  ribosomal protein L18 (rplR)
+TP0206         212564   213082  +2  ribosomal protein S5 (rpsE)
+TP0206a        213085   213270  +1  ribosomal protein L30
+TP0207         213270   213731  +3  ribosomal protein L15 (rplO)
+TP0208         213739   215091  +1  preprotein translocase SecY
+TP0209         215096   215209  +2  ribosomal protein L36 (rpmJ-1)
+TP0210         215225   215590  +2  30S ribosomal protein S13
+TP0211         215608   215988  +1  30S ribosomal protein S11
+TP0212         216003   217058  +3  DNA-directed RNA polymerase alpha subunit
+TP0213         217048   217542  +1  ribosomal protein L17 (rplQ)
+TP0215         217969   218631  +1  grpE protein (grpE)
+TP0216         218747   220654  +2  molecular chaperone DnaK
+TP0218         222201   223670  +3  sigma factor SigB regulation protein, putative
+TP0219         223674   225821  +3  sigma factor SigG regulation protein, putative
+TP0220         225850   226176  +1  anti-sigma F factor antagonist (spoIIAA-1)
+TP0221         226177   226959  +1  D,D-carboxypeptidase, putative
+TP0225         229177   229917  +1  leucine-rich repeat protein TpLRR
+TP0227         236575   235808  -2  cobalt ABC transporter, ATP-binding protein
+TP0228         237457   236642  -2  biotin synthase, putative
+TP0229         237401   238234  +2  DNA polymerase, bacteriophage-type
+TP0230         238239   240212  +3  primosomal protein N (priA)
+TP0233         241210   241755  +1  anti-sigma F factor antagonist, putative
+TP0234         241990   242160  +1  ribosomal protein L33 (rpmG)
+TP0235         242310   242489  +3  preprotein translocase subunit (secE)
+TP0236         242499   243056  +3  transcription antitermination protein (nusG)
+TP0237         243163   243603  +1  50S ribosomal protein L11
+TP0238         243600   244280  +3  50S ribosomal protein L1
+TP0239         244282   244824  +1  ribosomal protein L10 (rplJ)
+TP0240         244933   245322  +1  ribosomal protein L7/L12 (rplL)
+TP0241         245585   249121  +2  DNA-directed RNA polymerase beta subunit
+TP0242         249134   253384  +2  DNA-directed RNA polymerase beta' subunit
+TP0243         253487   253861  +2  30S ribosomal protein S12
+TP0244         253883   254353  +2  30S ribosomal protein S7
+TP0247         259822   260895  +1  N-acetylmuramoyl-L-alanine amidase (amiA)
+TP0249         261445   262497  +1  flagellar filament outer layer protein (flaA-1)
+TP0250a        262610   262897  +2  ribosomal protein S20
+TP0251         262929   263246  +3  DNA-binding protein II
+TP0252         263236   264876  +1  apolipoprotein N-acyltransferase, putative
+TP0254         265517   267076  +2  transcription termination factor Rho
+TP0255         267195   267398  +3  ribosomal protein L31 (rpmE)
+TP0256         267443   268093  +2  CDP-diacylglycerol--glycerol-3-phosphate 3-phosphatidyltransferase (pgsA)
+TP0257         268190   269260  +2  glycerophosphoryldiester phosphodiesterase (glpQ)
+TP0261         272318   273361  +2  catabolite gene activator, putative
+TP0262         273339   274013  +3  catabolite gene activator (crp)
+TP0264         275817   276473  +3  deoxyribose-phosphate aldolase (deoC)
+TP0265         278272   276905  -2  amino acid ABC transporter, permease protein (braC)
+TP0271         288511   287537  -2  chromosome partitioning protein (parB)
+TP0270         286104   287540  +3  polynucleotide adenylyltransferase (pcnA)
+TP0272         289259   288498  -3  SpoOJ regulator (soj)
+TP0274         290721   290221  -1  deoxycytidylate deaminase, putative
+TP0275         291559   290810  -2  UDP-N-acetyl-D-mannosamine transferase, putative
+TP0277         293941   292595  -2  carboxyl-terminal protease (ctp)
+TP0279         294243   296834  +3  ribosomal protein S1 (rpsA)
+TP0283         297994   298473  +1  lipopolysaccharide core biosynthesis protein (kdtB)
+TP0288         301183   302130  +1  spore coat polysaccharide biosynthesis protein (spsF)
+TP0292         305554   306807  +1  outer membrane protein (tpn50)
+TP0294         306973   308238  +1  phosphoribosylpyrophosphate synthetase
+TP0295         308257   309501  +1  carhohydrate kinase (xylB)
+TP0298         311131   312162  +1  exported protein (tpn38b)
+TP0300         312368   313918  +2  ribose/galactose ABC transporter, ATP-binding protein (rbsA-1)
+TP0303         317913   315967  -1  DNA mismatch repair protein (mutL)
+TP0305         320972   322705  +2  CTP synthetase
+TP0306         322870   323484  +1  30S ribosomal protein S4
+TP0308         324574   325539  +1  amino acid ABC transporter, periplasmic binding protein (hisJ)
+TP0309         325605   326423  +3  amino acid ABC transporter, periplasmic binding protein
+TP0313         327985   330273  +1  tpr protein E (tprE)
+TP0317         334663   332393  -2  tpr protein G (tprG)
+TP0319         334823   335884  +2  membrane lipoprotein (tmpC)
+TP0321         336125   337726  +2  ribose/galactose ABC transporter, ATP-binding protein (rbsA-2)
+TP0322         337636   338838  +1  ribose/galactose ABC transporter, permease protein (rbsC-1)
+TP0323         338835   339785  +3  ribose/galactose ABC transporter, permease protein (rbsC-2)
+TP0326         344276   346837  +2  outer membrane protein
+TP0327         346894   347412  +1  cationic outer membrane protein (ompH)
+TP0328         347468   350170  +2  DNA mismatch repair protein
+TP0330         353782   351986  -2  cell division protein, putative
+TP0329         350288   352012  +2  serine hydroxymethyltransferase
+TP0331         355478   354012  -3  6-phosphogluconate dehydrogenase
+TP0336         357973   359673  +1  comE protein, putative
+TP0337         359654   360511  +2  dimethyladenosine transferase (ksgA)
+TP0340         363482   362010  -3  folylpolyglutamate synthetase (folC)
+TP0341         363501   364946  +3  UDP-N-acetylmuramate--L-alanine ligase
+TP0342         365067   365627  +3  cytidylate kinase
+TP0343         365621   366454  +2  A/G-specific adenine glycosylase, putative
+TP0344         369881   366459  -3  transcription-repair coupling factor (trcF)
+TP0345         370034   371125  +2  phospho-N-acetylmuramoyl-pentapeptide-transferase (mraY)
+TP0349         374425   373895  -2  peptidyl-prolyl cis-trans isomerase, FKBP-type (slyD)
+TP0350         374639   375925  +2  glutamate-5-semialdehyde dehydrogenase (proA)
+TP0351         375922   376812  +1  gamma-glutamyl kinase
+TP0353         377707   377198  -2  ribonuclease H (rnhA)
+TP0354         377970   378596  +3  thymidylate kinase (tmk)
+TP0356         379151   379468  +2  RNA-binding protein, putative
+TP0357         379570   380310  +1  biotin--acetyl-CoA-carboxylase ligase (birA)
+TP0361         383774   382926  -3  lysophosphatidic acid acyltransferase, putative
+TP0362         383850   384086  +3  ribosomal protein L28 (rpmB)
+TP0363         384578   387016  +2  chemotaxis histidine kinase (cheA)
+TP0364         387010   388377  +1  purine-binding chemotaxis protein (cheW-1)
+TP0365         388399   388863  +1  chemotaxis protein (cheX)
+TP0366         388876   389310  +1  chemotaxis response regulator (cheY)
+TP0367         389614   392439  +1  chromosome segregation protein, putative
+TP0372         395776   396366  +1  general stress protein (ctc)
+TP0378         401949   402329  +3  flagellar protein, putative
+TP0379         405154   402404  -2  translocase
+TP0380         407081   405261  -3  DNA repair helicase, putative
+TP0386         410125   411504  +1  UDP-N-acetylmuramoylalanyl-D-glutamyl-2,6-diaminopimelate--D-alanyl-D-alanine ligase (murF)
+TP0387         411501   412655  +3  cell division protein (ftsW)
+TP0388         412633   413448  +1  cell division protein (ftsQ)
+TP0389         413461   414705  +1  cell division protein (ftsA)
+TP0390         414751   416007  +1  cell division protein FtsZ
+TP0391         416004   416924  +3  integrase/recombinase (codV)
+TP0393         417663   418571  +3  smf protein (smf)
+TP0394         418604   420799  +2  DNA topoisomerase I (topA)
+TP0395         420792   421685  +3  integrase/recombinase (xprB)
+TP0396         421833   422243  +3  flagellar basal-body rod protein (flgB)
+TP0397         422328   422717  +3  flagellar basal body rod protein
+TP0398         422773   423147  +1  flagellar basal body protein
+TP0399         423264   424967  +3  flagellar M-ring protein
+TP0400         424972   426030  +1  flagellar motor protein
+TP0401         426078   427007  +3  flagellar assembly protein
+TP0402         427035   428378  +3  flagellum-specific ATP synthase (fliI)
+TP0403         428407   428859  +1  flagellar protein, putative
+TP0405         429835   429386  -2  mcbG protein, putative
+TP0406         430026   430832  +3  glutamate racemase (murI)
+TP0407         430960   431634  +1  phosphoglycolate phosphatase (gph-1)
+TP0410         435457   437208  +1  protein export protein SecD
+TP0411         437205   438467  +3  protein-export membrane protein (secF)
+TP0413         440765   438867  -3  phosphoglucomutase
+TP0414         440868   442223  +3  D-alanine glycine permease (dagA)
+TP0416         444042   442684  -1  signal recognition particle protein (ffh)
+TP0417         445714   444035  -2  apolipoprotein N-acyltransferase
+TP0418         445741   446934  +1  galactokinase
+TP0419         446931   447494  +3  survival protein, putative
+TP0424         451930   452628  +1  V-type ATP synthase subunit E
+TP0426         453008   454777  +2  V-type ATP synthase subunit A
+TP0427         454781   456073  +2  V-type ATP synthase subunit B
+TP0428         456085   456705  +1  V-type ATP synthase subunit D
+TP0429         456702   458570  +3  ATP synthase subunit I
+TP0430         458607   459029  +3  ATP synthase subunit K
+TP0435         462495   462025  -1  lipoprotein, 17 kDa (tpp17)
+TP0439         465130   465642  +1  purine-binding chemotaxis protein (cheW-2)
+TP0440         465732   466883  +3  spore coat polysaccharide biosynthesis protein, putative
+TP0442         467790   469511  +3  DNA repair protein (recN)
+TP0445         471477   472106  +3  4-methyl-5(b-hydroxyethyl)-thiazole monophosphate biosynthesis enzyme (thiJ)
+TP0446         472148   473362  +2  gcpE protein (gcpE)
+TP0448         474541   475623  +1  uracil phosphoribosyltransferase, putative
+TP0450         476354   478405  +2  translation elongation factor G (fusA-1)
+TP0451a        478421   478777  +2  permease
+TP0452         478855   482130  +1  isoleucyl-tRNA synthetase
+TP0472         501752   499677  -3  excinuclease ABC, subunit C (uvrC)
+TP0475         505021   503414  -2  glucose-6-phosphate isomerase
+TP0476         506431   505085  -2  acetate kinase (ack)
+TP0477         507223   506498  -2  glucose-6-phosphate 1-dehydrogenase, putative
+TP0478         508831   507284  -2  glucose-6-phosphate 1-dehydrogenase
+TP0485         517388   515544  -3  adenylate cyclase
+TP0486         518980   517526  -2  antigen, p83/100
+TP0488         520874   523411  +2  methyl-accepting chemotaxis protein (mcp2-1)
+TP0492         526077   527894  +3  DNA primase (dnaG)
+TP0493         527891   529726  +2  RNA polymerase sigma factor
+TP0497         531889   532923  +1  rod shape-determining protein (mreB)
+TP0498         532928   533791  +2  rod shape-determining protein (mreC)
+TP0499         533788   534294  +1  rod shape-determining protein (mreD)
+TP0500         534295   536169  +1  penicillin-binding protein (pbp-1)
+TP0501         536166   537467  +3  rod shape-determining protein (rodA)
+TP0505         540396   539062  -1  hexokinase (hxk)
+TP0506         541131   542459  +3  trigger factor
+TP0507         542452   543063  +1  ATP-dependent Clp protease proteolytic component (clpP-1)
+TP0508         543050   544297  +2  ATP-dependent protease ATP-binding subunit
+TP0509         544394   544960  +2  alkyl hydroperoxide reductase (ahpC)
+TP0510         546958   545141  -2  GTP-binding protein LepA
+TP0511         547001   547627  +2  transcription factor (carD)
+TP0513         548945   550345  +2  K+ transport protein (trkA)
+TP0514         550459   553341  +1  excinuclease ABC, subunit A (uvrA)
+TP0516         557907   556327  -1  virulence factor (mviN)
+TP0517         558494   557904  -3  Holliday junction nuclease (ruvC)
+TP0519         560541   559165  -1  response regulatory protein (atoC)
+TP0521         563007   561736  -1  DNA polymerase III, gamma and tau subunits, putative
+TP0523         564648   563494  -1  UDP-N-glucosamine--N-acetylmuramyl-(pentapeptide) pyrophosphoryl-undecaprenol N-acetylglucosamine transferase (murG)
+TP0524         567297   564652  -1  ATP-dependent protease LA (lon-2)
+TP0525         567433   567996  +1  translation elongation factor P (efp)
+TP0526         568144   570150  +1  ATP-dependent helicase (hrpA)
+TP0527         570827   570198  -3  V-type ATPase, subunit D (atpD-2)
+TP0528         572364   570922  -1  V-type ATP synthase subunit B
+TP0529         574178   572361  -3  V-type ATP synthase subunit A
+TP0530         574801   574175  -2  V-type ATPase, subunit E, putative
+TP0531         575145   574807  -1  V-type ATPase, subunit F, putative
+TP0533         577129   575765  -2  V-type ATPase, subunit I (atpI-2)
+TP0536         578905   578504  -2  translocase
+TP0537         579804   579055  -1  triosephosphate isomerase (tpi)
+TP0538         581214   579955  -1  phosphoglycerate kinase (pgk)
+TP0540         581688   582059  +3  anti-sigma F factor antagonist (spoIIAA-2)
+TP0542         584866   583145  -2  diphosphate--fructose-6-phosphate 1-phosphotransferase
+TP0541         582189   583148  +3  GTP-binding protein (era)
+TP0543         585609   584926  -1  Holliday junction DNA helicase (ruvA)
+TP0545         588608   587544  -3  methylgalactoside ABC transporter, periplasmic galactose-binding protein (mglB-1)
+TP0546         590693   588693  -3  periplasmic serine protease, putative
+TP0547         591535   590405  -2  penicillin tolerance protein (lytB)
+TP0549         593081   595525  +2  ATPase (clpC)
+TP0550         597053   595566  -3  tRNA modification GTPase
+TP0551         598145   597057  -3  phosphatase
+TP0554         600181   600849  +1  phosphoglycolate phosphatase (gph-2)
+TP0555         602103   600913  -1  glutamate/ aspartate transporter, putative
+TP0556         603318   602326  -1  asparagine synthetase AsnA
+TP0560         608379   606394  -1  transketolase A (tktA)
+TP0562         609512   610648  +2  spore coat polysaccharide biosynthesis protein (spsE)
+TP0566         615685   614198  -2  alginate O-acetylation protein (algI)
+TP0568         617048   616416  -3  4-hydroxy-2-oxoglutarate aldolase/2-dehydro-3-deoxyphosphogluconate aldolase (eda)
+TP0569         619494   617170  -1  aminopeptidase P
+TP0571         621056   620391  -3  Tp70 protein
+TP0574         623570   622266  -3  carboxypeptidase, 47 kDa
+TP0576         625802   626908  +2  peptide chain release factor 2 (prfB)
+TP0578         628651   629538  +1  cell division protein (ftsY)
+TP0581         631586   632266  +2  ABC transporter, ATP-binding protein
+TP0585         635248   636891  +1  oligopeptide ABC transporter, periplasmic binding protein (oppA)
+TP0586         636980   639616  +2  leucyl-tRNA synthetase (leuS)
+TP0589         640971   640705  -1  phosphocarrier protein HPr (ptsH)
+TP0590         641059   640943  -2  ribosomal protein L36 (rpmJ-2)
+TP0591         641975   641016  -3  HPr kinase/phosphorylase
+TP0595         647568   646933  -1  adenylate kinase (adk)
+TP0596         648704   647592  -3  polynucleotide adenylyltransferase (pcnB)
+TP0600         652923   651571  -1  zinc protease, putative
+TP0601         654071   652920  -3  1-deoxy-D-xylulose 5-phosphate reductoisomerase
+TP0602         654910   654047  -2  phosphatidate cytidylyltransferase (cdsA)
+TP0604         656150   655599  -3  ribosome recycling factor
+TP0605         657126   656254  -1  elongation factor Ts
+TP0606         658092   657217  -1  30S ribosomal protein S2
+TP0609         659665   661236  +1  asparaginyl-tRNA synthetase
+TP0610         661246   663327  +1  tpr protein H (tprH)
+TP0611         663469   664248  +1  ABC transporter, ATP-binding protein
+TP0614         666940   668154  +1  nitrogen fixation protein (nifS-1)
+TP0615         668205   668648  +3  nitrogen fixation protein (nifU)
+TP0616         668669   669433  +2  ribose 5-phosphate isomerase (rpiA)
+TP0620         672887   671058  -3  tpr protein I (tprI)
+TP0621         675221   672945  -3  tpr protein J (tprJ)
+TP0623         676479   678818  +3  membrane-bound lytic murein transglycosylase D (dniR)
+TP0626         681001   682176  +1  exonuclease, putative
+TP0627         682173   685316  +3  exonuclease (sbcC)
+TP0628         685313   686794  +2  nicotinate phosphoribosyltransferase
+TP0630         687959   688870  +2  chemotaxis protein methyltransferase (cheR)
+TP0631         688917   690128  +3  protein-glutamate methylesterase (cheB)
+TP0632         690233   691246  +2  tryptophanyl-tRNA synthetase
+TP0633         691387   692262  +1  bifunctional methionine sulfoxide reductase A/B protein
+TP0634         692381   694852  +2  DNA ligase (lig)
+TP0637         696645   695695  -1  tRNA delta(2)-isopentenylpyrophosphate transferase
+TP0639         697723   699687  +1  methyl-accepting chemotaxis protein (mcp2-2)
+TP0640         699711   701555  +3  methyl-accepting chemotaxis protein (mcp2-3)
+TP0641         702901   701573  -2  histidyl-tRNA synthetase (hisS)
+TP0642         703042   704802  +1  phosphomannomutase (manB)
+TP0644         707029   705443  -2  lysyl-tRNA synthetase
+TP0643         704799   705446  +3  DNA polymerase III, subunit epsilon (dnaQ)
+TP0647         709809   708529  -1  seryl-tRNA synthetase
+TP0649         712649   711852  -3  hemolysin (tlyC)
+TP0652         715712   716851  +2  spermidine/putrescine ABC transporter, ATP-binding protein (potA)
+TP0653         716848   717747  +1  spermidine/putrescine ABC transporter, permease protein (potB)
+TP0654         717740   718558  +2  spermidine/putrescine ABC transporter, permease protein (potC)
+TP0655         718594   719640  +1  spermidine/putrescine ABC transporter, periplasmic binding protein (potD)
+TP0657         719916   719695  -1  carbon storage regulator (csrA)
+TP0658         720362   719910  -3  transmembrane protein, putative
+TP0659         721631   720381  -3  flagellar hook-associated protein
+TP0660         723542   721665  -3  flagellar hook-associated protein
+TP0662         725281   724283  -2  fructose-bisphosphate aldolase
+TP0663         725548   726276  +1  outer membrane protein, putative
+TP0664         726273   726998  +3  flagellar filament outer layer protein (flaA-2)
+TP0667         729772   728105  -2  uridine kinase (udk)
+TP0669         734120   730608  -3  DNA polymerase III subunit alpha
+TP0670         735464   734274  -3  D-alanine--D-alanine ligase (ddlA)
+TP0671         736500   735466  -1  sn-1,2-diacylglycerol cholinephosphotransferase, putative
+TP0672         737919   736531  -1  glycyl-tRNA synthetase
+TP0673         739667   738054  -3  glutamyl-tRNA synthetase
+TP0680         744967   743909  -2  o-sialoglycoprotein endopeptidase (gcp)
+TP0681         746091   745018  -1  alanine racemase (alr)
+TP0682         746782   746180  -2  cell division protein (ftsJ)
+TP0683         746875   747969  +1  octaprenyl-diphosphate synthase
+TP0684         748262   749473  +2  methylgalactoside ABC transporter, periplasmic galactose-binding protein (mglB-2)
+TP0685         749593   751083  +1  methylgalactoside ABC transporter, ATP binding protein (mglA)
+TP0686         751098   752693  +3  methylgalactoside ABC transporter, permease protein (mglC)
+TP0687         754881   752821  -1  DNA recombinase (recG)
+TP0688         755950   754937  -2  immunity protein (mccF)
+TP0689         757333   755951  -2  GTP-binding protein EngA
+TP0692         759952   758729  -2  recA protein (recA)
+TP0694         761695   762372  +1  5,10-methenyltetrahydrofolate synthetase, putative
+TP0696         765077   764241  -3  nicotinamidase, putative
+TP0695         762460   764253  +1  phosphoribosylglycinamide formyltransferase, putative
+TP0701         767169   766966  -1  DNA-directed RNA polymerase, putative
+TP0704         770690   768570  -3  single-stranded-DNA-specific exonuclease (recJ)
+TP0705         773487   770833  -1  penicillin-binding protein (pbp-2)
+TP0709         775888   776676  +1  sigma factor WhiG
+TP0712         780193   779279  -2  ATP-binding protein (ylxH-1)
+TP0713         781478   780165  -3  flagellar-associated GTP-binding protein (flhF)
+TP0714         783636   781513  -1  flagellar biosynthesis protein
+TP0715         784775   783645  -3  flagellar biosynthesis protein
+TP0716         785569   784772  -2  flagellar biosynthetic protein (fliR)
+TP0717         785866   785582  -2  flagellar biosynthetic protein (fliQ)
+TP0718         786700   785885  -2  flagellar biosynthesis protein
+TP0720         788467   787421  -2  flagellar motor switch protein (fliY)
+TP0721         789494   788460  -3  flagellar motor switch protein
+TP0722         790064   789516  -3  flagellar protein
+TP0724         790890   790174  -1  flagellar motor protein
+TP0725         791675   790896  -3  flagellar motor rotation protein (motA)
+TP0726         791888   791691  -3  flagellar protein (flbD)
+TP0727         793337   791946  -3  flagellar hook protein
+TP0728         793869   793408  -1  flagellar hook assembly protein
+TP0729         795588   793945  -1  treponemal aqueous protein (tap1)
+TP0732         798296   797349  -3  methylenetetrahydrofolate dehydrogenase (folD)
+TP0734         799785   799084  -1  purine nucleoside phosphorylase (deoD)
+TP0735         801423   799867  -1  glutamate synthase (gltA)
+TP0736         802268   801426  -3  hydrogenase, gamma chain (hydG)
+TP0737         802502   803812  +2  sugar ABC transporter, periplasmic binding protein (msmE)
+TP0742         807895   806765  -2  GTP-binding protein (obg)
+TP0743         808276   808013  -2  50S ribosomal protein L27
+TP0745         808963   808646  -2  ribosomal protein L21 (rplU)
+TP0746         811775   809070  -3  pyruvate, phosphate dikinase
+TP0748         814944   812908  -1  cytoplasmic filament protein A (cfpA)
+TP0755         820130   819588  -3  PTS system, nitrogen regulatory IIA component (ptsN-2)
+TP0756         821289   820330  -1  methionyl-tRNA formyltransferase (fmt)
+TP0757         821781   821293  -1  polypeptide deformylase (def)
+TP0758         822031   821822  -2  30S ribosomal protein S21
+TP0760         822226   824184  +1  penicillin-binding protein (pbp-3)
+TP0765         830201   828372  -3  cell division protein (ftsH)
+TP0767         831696   833783  +3  elongation factor EF-2
+TP0768         833922   834959  +3  membrane protein (tmpA)
+TP0769         834956   835933  +2  outer membrane protein (tmpB)
+TP0770         835978   837927  +1  ATP-dependent RNA helicase
+TP0773         841793   840597  -3  periplasmic serine protease DO (htrA-1)
+TP0774         842138   842812  +2  Mg2+ transport protein (mgtC)
+TP0775         842892   843527  +3  endonuclease III (nth)
+TP0778         845637   844726  -1  mazG protein (mazG)
+TP0779         846278   845634  -3  dedA protein (dedA)
+TP0780         848364   846325  -1  NAD(+) synthetase
+TP0786         852093   852806  +3  ABC transporter, ATP-binding protein, putative
+TP0790         857718   855052  -1  antibiotic transport protein, putative
+TP0792         858092   858952  +2  flagellar filament 33 kDa core protein (flaB2)
+TP0794         861877   860687  -2  S-adenosylmethionine synthetase
+TP0797         864017   863226  -3  1-pyrroline-5-carboxylate reductase (proC)
+TP0798         866503   864068  -2  methionyl-tRNA synthetase
+TP0800         866831   868303  +2  serine-type D-Ala-D-Ala carboxypeptidase (dacC)
+TP0801         870793   868364  -2  ATP-dependent Clp protease subunit A (clpA)
+TP0805         875761   873482  -2  exoribonuclease II (rnb)
+TP0804         872468   873631  +2  sugar ABC transporter, ATP-binding protein (ugpC)
+TP0806         877254   875758  -1  femA protein, putative
+TP0807         877383   877571  +3  ribosomal protein L32 (rpmF)
+TP0808         877632   877868  +3  acyl carrier protein (acpP)
+TP0809         877865   878629  +2  ribonuclease III (rnc)
+TP0810         878660   879571  +2  DNA adenine methyltransferase (dam)
+TP0814         882687   883610  +3  thioredoxin reductase (trxB)
+TP0817         886888   885590  -2  enolase (eno)
+TP0819         887996   887064  -3  ribonuclease Z
+TP0821         889696   888890  -2  lipoprotein (tpn32)
+TP0823         891156   890770  -1  desulfoferrodoxin (rbo)
+TP0824         891553   893445  +1  1-deoxy-D-xylulose-5-phosphate synthase
+TP0828         895372   895749  +1  holo-acyl-carrier protein synthase (acpS)
+TP0830         896627   897469  +2  pseudouridylate synthase (hisT)
+TP0831         899248   897479  -2  arginyl-tRNA synthetase
+TP0834         902182   900932  -2  tyrosyl-tRNA synthetase (tyrS)
+TP0835         905073   902269  -1  ankyrin, putative
+TP0837         906186   907964  +3  threonyl-tRNA synthetase (thrS)
+TP0838         909677   908013  -3  ABC transporter, ATP-binding protein
+TP0841         914632   913175  -2  periplasmic serine protease DO (htrA-2)
+TP0842         915711   914944  -1  methionine aminopeptidase (map)
+TP0843         916659   915835  -1  heat shock protein, putative
+TP0844         916752   917804  +3  glyceraldehyde 3-phosphate dehydrogenase (gap)
+TP0845         918449   917859  -3  P23 protein, putative
+TP0848         919453   919085  -2  50S ribosomal protein L20
+TP0849         919686   919486  -1  50S ribosomal protein L35
+TP0850         920278   919739  -2  translation initiation factor 3 (infC)
+TP0852         923642   922644  -3  prolipoprotein diacylglyceryl transferase (lgt)
+TP0853         924929   923793  -3  ATP-binding protein (ylxH-2)
+TP0861         939181   937274  -2  glucosamine-fructose-6-phosphate aminotransferase (glmS)
+TP0862         940212   939418  -1  peptidyl-prolyl cis-trans isomerase, FKBP-type, 22 kDa (fklB)
+TP0863         940347   941630  +3  nitrogen fixation protein (nifS-2)
+TP0868         947148   948008  +3  flagellar filament 34.5 kDa core protein (flaB1)
+TP0870         948287   949144  +2  flagellar filament 31 kDa core protein (flaB3)
+TP0872         949442   951610  +2  flagellar hook-associated protein
+TP0880         957929   957204  -3  membrane spanning protein, putative
+TP0881         958725   957919  -1  ABC transporter, ATP-binding protein (natA)
+TP0885         962945   962505  -3  deoxyuridine 5'-triphosphate nucleotidohydrolase (dut)
+TP0886         965050   962942  -2  polyribonucleotide nucleotidyltransferase (pnp)
+TP0887         965467   965198  -2  ribosomal protein S15 (rpsO)
+TP0888         966310   965483  -2  riboflavin kinase/FMN adenylyltransferase (ribF)
+TP0889         967414   966314  -2  tRNA pseudouridine 55 synthase (truB)
+TP0890         967772   967392  -3  ribosome-binding factor A (rbfA)
+TP0891         970297   967769  -2  translation initiation factor IF-2
+TP0892         971930   970473  -3  transcription elongation factor NusA
+TP0897         975833   974316  -3  tpr protein K (tprK)
+TP0898         979549   975830  -2  ATP-dependent nuclease, subunit A, putative
+TP0902         984878   983997  -3  carboxylesterase (est)
+TP0903         984880   986478  +1  UDP-N-acetylmuramoylalanine--D-glutamate ligase (murD)
+TP0905         986685   987056  +3  ribosomal protein S16 (rpsP)
+TP0908         987891   988643  +3  tRNA (guanine-N(1)-)-methyltransferase
+TP0909         988615   988986  +1  50S ribosomal protein L19
+TP0917         994010   995359  +2  Mg2+ transport protein (mgtE)
+TP0919         996490   996173  -2  thioredoxin (trx)
+TP0921         999250  1000587  +1  NADH oxidase
+TP0924        1002996  1005332  +3  tex protein (tex)
+TP0925        1005699  1006139  +3  flavodoxin
+TP0926        1007828  1006290  -3  signal peptidase I, putative
+TP0933        1015120  1013498  -2  UDP-N-acetylmuramoylalanyl-D-glutamate--2,6-diaminopimelate ligase (murE)
+TP0935        1017410  1016472  -3  N-acetylphosphinothricin-tripetide-deacetylase, putative
+TP0934        1015256  1016479  +2  glutamate transporter, putative
+TP0936        1018677  1017604  -1  hemolysin, putative
+TP0939        1023930  1020376  -1  pyruvate oxidoreductase
+TP0943        1025636  1025190  -3  flagellar protein (fliS)
+TP0945        1027684  1027028  -2  ribulose-phosphate 3-epimerase (cfxE)
+TP0946        1027836  1028504  +3  glucose-inhibited division protein B (gidB)
+TP0947        1029196  1028549  -2  peptidyl-prolyl cis-trans isomerase, cyclophilin-binding (cyp)
+TP0948        1029888  1029193  -1  spoIIIJ-associated protein (jag)
+TP0949        1031901  1029904  -1  putative inner membrane protein translocase component YidC
+TP0951        1032620  1032465  -3  50S ribosomal protein L34
+TP0952        1033777  1032740  -2  lipase, putative
+TP0953        1035049  1033859  -2  pheromone shutdown protein (traB)
+TP0957        1038074  1039102  +2  Tp33 protein
+TP0958        1039134  1041032  +3  dicarboxylate transporter (dctM)
+TP0960        1042296  1041502  -1  flagellar basal-body rod protein (flgG-1)
+TP0961        1043187  1042372  -1  flagellar basal-body rod protein (flgG-2)
+TP0964        1046542  1045835  -2  ABC transporter, ATP-binding protein
+TP0965        1047504  1046542  -1  membrane fusion protein, putative
+TP0971        1054747  1054133  -2  membrane antigen, pathogen-specific (tpd)
+TP0973        1056337  1057998  +1  phenylalanyl-tRNA synthetase alpha subunit
+TP0978        1061478  1062071  +3  signal peptidase II
+TP0980        1063022  1064044  +2  histidine phosphokinase/phophatase (ntrB)
+TP0981        1064104  1065267  +1  sensory transduction histidine kinase, putative
+TP0982        1065283  1065909  +1  glpG protein, putative
+TP0984        1068558  1066639  -1  heat shock protein 90
+TP0985        1068702  1070510  +3  aspartyl-tRNA synthetase (aspS)
+TP0989        1073477  1072605  -3  P26
+TP0991        1076689  1076847  +1  rubredoxin
+TP0993        1078260  1077304  -1  rare lipoprotein A, putative
+TP0995        1079501  1080787  +2  cyclic nucleotide binding protein
+TP0997        1084439  1082643  -3  protease IV (sppA)
+TP0998        1085975  1084473  -3  sodium/proton-dependent alanine transporter
+TP0999        1086047  1088446  +2  cell division protein, putative
+TP1004        1093158  1092553  -1  recombination protein (recR)
+TP1005        1094950  1093232  -2  DNA polymerase III subunits gamma and tau
+TP1006        1096922  1095009  -3  DNA gyrase, subunit B (gyrB)
+TP1007        1097948  1097031  -3  thymidylate synthase
+TP1008        1100528  1097991  -3  ribonucleotide-diphosphate reductase alpha subunit
+TP1009        1101725  1100655  -3  NAD(P)H-dependent glycerol-3-phosphate dehydrogenase
+TP1010        1102271  1101822  -3  nucleoside-diphosphate kinase (ndk)
+TP1011        1103005  1102397  -2  peptidyl-tRNA hydrolase
+TP1012        1103975  1103040  -3  RNA polymerase sigma-43 factor (sigA)
+TP1013        1104180  1104446  +3  chaperonin (groES)
+TP1015        1106782  1106357  -2  transcription antitermination protein NusB
+TP1016        1107864  1106779  -1  basic membrane protein (tpn39b)
+TP1017        1109754  1107937  -1  alanyl-tRNA synthetase
+TP1019        1111462  1111905  +1  glu-tRNA amidotransferase, subunit C (gatC)
+TP1020        1111906  1113426  +1  glu-tRNA amidotransferase, subunit A (gatA)
+TP1021        1113419  1114948  +2  aspartyl/glutamyl-tRNA amidotransferase subunit B
+TP1022        1116411  1115044  -1  DNA repair protein (sms)
+TP1023        1116952  1116458  -2  recX protein (recX)
+TP1024        1117469  1117080  -3  ribosomal protein S9 (rpsI)
+TP1025        1117913  1117485  -3  50S ribosomal protein L13
+TP1026        1118346  1120115  +3  oligoendopeptidase F, putative
+TP1027        1120237  1121013  +1  uridine phosphorylase (udp)
+TP1028        1123041  1121029  -1  DNA helicase II (uvrD)
+TP1031        1124354  1125898  +2  tpr protein L (tprL)
+TP1035        1131313  1128443  -2  valyl-tRNA synthetase (valS)
+TP1036        1131466  1133844  +1  cation-transporting ATPase, P-type
+TP1037        1134650  1133934  -3  hemolysin III (hlyIII)
+TP1038        1135342  1134809  -2  bacterioferrin (TpF1)
+TP1039        1135569  1136141  +3  adenine phosphoribosyltransferase
+TP1040        1137219  1136164  -1  lysyl-tRNA synthetase (lysS-2)
+TP1041        1137932  1137219  -3  ATP-dependent Clp protease proteolytic subunit

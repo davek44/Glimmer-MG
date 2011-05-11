@@ -1,0 +1,4 @@
+#include "base.h"
+
+extern int base_int;
+extern char* base_charstar;

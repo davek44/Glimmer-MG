@@ -1,0 +1,24 @@
+# Tell c_make.gen to echo commands.
+# VERBOSE = 1
+
+include $(LOCAL_WORK)/src/c_make.gen
+
+
+# Project subdirectories
+
+SUBDIRS = Common ICM Glimmer Util
+
+CFLAGS = -O3 -Wall
+CXXFLAGS = -O3 -Wall
+
+LDFLAGS = -lm
+
+
+#AS_BUILD_DIR =$(LOCAL_WORK)
+INC_IMPORT_DIRS += \
+		$(patsubst %, $(LOCAL_WORK)/src/%, $(strip $(SUBDIRS))) \
+                $(LOCAL_WORK)/inc
+LIB_IMPORT_DIRS += $(LOCAL_WORK)/lib /usr/lib /usr/shlib /usr/X11R6/lib \
+     $(SYBASE)/lib
+
+OBJ_SEARCH_PATH = $(LOCAL_WORK)/obj
