@@ -27,7 +27,7 @@ import pdb, sys, string, os, subprocess
 ################################################################################
 
 scripts_dir = os.path.abspath(os.path.dirname(sys.argv[0]))
-bin_dir = os.path.abspath('%s/../bin' % bin_dir)
+bin_dir = os.path.abspath('%s/../bin' % scripts_dir)
 elph_bin = os.path.abspath('%s/../ELPH/sources/elph' % scripts_dir)
 
 forward_start_codons = ['ATG','GTG','TTG']
@@ -705,7 +705,8 @@ def rbs_model(genes, seqs, hypothetical, out_prefix):
     rbs_out.close()
 
     # elph
-    os.system('%s %s.rbs.upstream LEN=6 2> /dev/null | get-motif-counts.awk > %s.motif' % (elph_bin, out_prefix, out_prefix))
+    p = subprocess.Popen('%s %s.rbs.upstream LEN=6 2> /dev/null | %s/get-motif-counts.awk > %s.motif' % (elph_bin, out_prefix, scripts_dir, out_prefix), shell=True)
+    os.waitpid(p.pid, 0)
     os.remove('%s.rbs.upstream' % out_prefix)
 
 
