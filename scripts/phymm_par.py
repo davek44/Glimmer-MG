@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from optparse import OptionParser, SUPPRESS_HELP
-import os, random, subprocess, time
+import os, random, subprocess, time, sys
 
 ################################################################################
 # phymm_par.py

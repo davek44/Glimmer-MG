@@ -26,10 +26,13 @@ def main():
     parser.add_option('--iter', dest='iterate', type='int', default=0, help='Iterate Glimmer by re-training on the initial predictions, thus assuming the sequences came from the same organism. [Default=%default]')
     parser.add_option('-q', dest='quality_file', help='Quality value file')
     parser.add_option('-i','--indels', dest='indels', action='store_true', default=False, help='Allow Glimmer to call indels')
-    parser.add_option('--single_cluster', dest='single_cluster', default=False, action='store_true', help='Rather than cluster the sequences using PhyScimm, treat the sequences as having come from a single genome/cluster. [Default=%default]')
-    parser.add_option('-f','--filter', dest='filter_t', type='int', default=1, help='In iterative re-training, Glimmer score threshold. [Default=%default]')
+    parser.add_option('--single_cluster', dest='single_cluster', default=False, 
+action='store_true', help='Rather than cluster the sequences using PhyScimm, treat the sequences as having come from a single genome/cluster. [Default=%default]')
     parser.add_option('--single_icm', dest='single_icm', default=False, action='store_true', help='Use coding ICMs trained on single organisms only [Default=%default]')
     parser.add_option('--long_orfs', dest='long_orfs', default=False, action='store_true', help='Generate the ICM to be used for the initial prediction iteration using the glimmer long-orfs program.')
+
+    parser.add_option('-f','--filter', dest='filter_t', type='int', default=1, help=SUPPRESS_HELP)
+     # in iterative re-training, Glimmer score threshold
     parser.add_option('--glim_suffix', dest='glim_suffix', default='', help=SUPPRESS_HELP)
      # add a suffix to the glimmer binary in order to run a different version
     parser.add_option('--ignore', dest='ignore', default=False, action='store_true', help=SUPPRESS_HELP)
@@ -37,7 +40,7 @@ def main():
     parser.add_option('--all_features', dest='all_features', default=False, action='store_true', help=SUPPRESS_HELP)
      # retrain all features include length and adjacency models
     parser.add_option('-t', dest='top_hits', type='int', default=3, help=SUPPRESS_HELP)
-    # number of Phymm top scoring genomes to use
+     # number of Phymm top scoring genomes to use
 
     # phymm options
     parser.add_option('--raw', dest='raw_done', default=False, action='store_true', help='Do not classify sequences with Phymm because output file already exists. [Default=%default]')
@@ -63,7 +66,7 @@ def main():
     
     # classify
     if not options.class_done and not options.raw_done:
-        p = subprocess.Popen('phymm_par.py -b -c -p %d --phymm %s %s' % (options.proc, phymm_dir, sequence_file), shell=True)
+        p = subprocess.Popen('%s/phymm_par.py -b -p %d %s' % (scripts_dir, options.proc, sequence_file), shell=True)
         os.waitpid(p.pid, 0)
 
     # parse classifications

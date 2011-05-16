@@ -125,7 +125,14 @@ my $oldBlastDB = $ENV{'BLASTDB'};
 
 my $oldBlastMat = $ENV{'BLASTMAT'};
 
-die("BLAST error: environment variable 'BLASTMAT' not found; please check your local blast binary installation.\n") if not $oldBlastMat;
+############################################################
+# Skip BLAST
+#
+# Author: David Kelley
+############################################################
+if(~$dk_opts{'b'}) {
+    die("BLAST error: environment variable 'BLASTMAT' not found; please check your local blast binary installation.\n") if not $oldBlastMat;
+}
 
 ###########################################################################################
 # 
