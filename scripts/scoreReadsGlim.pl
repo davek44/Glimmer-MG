@@ -1,25 +1,10 @@
 #!/usr/bin/perl
 
 use strict;
-
 use Cwd;
-
-$| = 1;
-
-############################################################
-# Add options:
-#  -b Don't run Blast
-#  -c Score with only ICM of largest fasta sequence
-#  -i <ignoreFile> Ignore ICMs listed in the file
-#  -f Score only in the forward direction, not reverse
-#  -s <ICM suffix> Change the ICM file suffix from .icm
-#
-# Author: David Kelley
-############################################################
 use Getopt::Std;
 
-my %dk_opts;
-getopts('bcfi:s:', \%dk_opts);
+$| = 1;
 
 my $dataFile = shift;
 
@@ -46,10 +31,19 @@ my $blastScore;
 my $blastMatch;
 
 ############################################################
-# Determine ICM suffix to use
+# Add options:
+#  -b Don't run Blast
+#  -c Score with only ICM of largest fasta sequence
+#  -i <ignoreFile> Ignore ICMs listed in the file
+#  -f Score only in the forward direction, not reverse
+#  -s <ICM suffix> Change the ICM file suffix from .icm
 #
 # Author: David Kelley
 ############################################################
+
+my %dk_opts;
+getopts('bcfi:s:', \%dk_opts);
+
 my $icm_suffix = "icm";
 if($dk_opts{'s'}) {
     $icm_suffix = $dk_opts{'s'};
