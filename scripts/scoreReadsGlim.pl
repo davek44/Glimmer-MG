@@ -124,7 +124,7 @@ my $oldBlastMat = $ENV{'BLASTMAT'};
 #
 # Author: David Kelley
 ############################################################
-if(~$dk_opts{'b'}) {
+if(!$dk_opts{'b'}) {
     die("BLAST error: environment variable 'BLASTMAT' not found; please check your local blast binary installation.\n") if not $oldBlastMat;
 }
 
