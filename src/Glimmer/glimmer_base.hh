@@ -21,8 +21,7 @@
 
 // Default values of global variables
 
-static const bool  DEFAULT_GENOME_IS_CIRCULAR = true;
-static const int  DEFAULT_MIN_GENE_LEN = 100;
+static const int  DEFAULT_MIN_GENE_LEN = 75;
 static const int  DEFAULT_MAX_OLAP_BASES = 30;
 static const int  DEFAULT_RIBOSOME_WINDOW_SIZE = 20;
 static const double  DEFAULT_START_PROB []

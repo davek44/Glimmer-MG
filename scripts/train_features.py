@@ -42,7 +42,7 @@ def main():
     usage = 'usage: %prog [options] <gbk_file>'
     parser = OptionParser(usage)
     parser.add_option('-l','--min_length', dest='min_length', type='int', default=75, help='Minimum length of gene (and ORF) in nucleotides to consider [default: %default]')
-    parser.add_option('-o','--max_overlap', dest='max_overlap', type='int', default=50, help='Maximum overlap of two genes (or gene and ORF) to consider [default: %default]')
+    parser.add_option('-o','--max_overlap', dest='max_overlap', type='int', default=30, help='Maximum overlap of two genes (or gene and ORF) to consider [default: %default]')
     parser.add_option('--gbk', dest='gbk_file', help='Gbk file to train on')
     parser.add_option('--predict', dest='predict_file', help='Glimmer predictions to train on')
     parser.add_option('--seq','--seqs', dest='seq_file', help='Sequence(s) file predictions were made on')

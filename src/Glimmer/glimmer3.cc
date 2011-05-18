@@ -50,21 +50,17 @@ ICM_t  Gene_ICM;
   // part of genes.
 int  Gene_ID_Ct = 0;
   // Counter used to assign ID numbers to tentative genes
-bool  Genome_Is_Circular = DEFAULT_GENOME_IS_CIRCULAR;
+bool  Genome_Is_Circular = false;
   // If true, input sequences are assumed to be circularly connected
   // so genes will be allowed to wrap around the end
 char  * ICM_File_Name = NULL;
   // Name of the file containing the probability model
-char  * Ignore_File_Name = NULL;
-  // Name of file containing list of regions that cannot be included
-  // in gene predictions
-int  Ignore_Score_Len = INT_MAX;
-  // Genes at least this long do not count the independent model
-  // in their score
-vector <Range_t>  Ignore_Region;
 double  Indep_GC_Frac = -1.0;
   // GC proportion used in simple independent model.
   // Set from counts of input sequences or by -C option
+int  Ignore_Score_Len = INT_MAX;
+  // Genes at least this long do not count the independent model
+  // in their score
 ICM_t  Indep_Model (3, 2, 3);
   // The ICM for an independent model of bases, based on GC-percentage
   // but without in-frame stop codons
@@ -114,8 +110,6 @@ int  Sequence_Len;
   // Length of genomic sequence string being processed.
 vector <const char *>  Start_Codon;
   // Sequences assumed to be start codons
-vector <double>  Start_Prob;
-  // Probability of occurrence of start codons
 vector <const char *>  Stop_Codon;
   // Sequences assumed to be stop codons
 string  Tag;
@@ -128,9 +122,6 @@ bool  Use_Entropy_Profiles = false;
 bool  Use_First_Start_Codon = DEFAULT_USE_FIRST_START_CODON;
   // If true, automatically use the earliest start codon in a gene;
   // otherwise, try to choose the best start codon
-bool  Use_Independent_Score = DEFAULT_USE_INDEPENDENT_SCORE;
-  // If true, let the non-Markov independent model compete with
-  // the periodic Markov models to score genes.
 
 bool Allow_Indels = false;
   // Artifact of Glimmer-MG
@@ -777,10 +768,10 @@ static void  Parse_Command_Line
         {"separate_genes", 1, 0, 'M'},
         {"no_indep", 0, 0, 'n'},
         {"max_olap", 1, 0, 'o'},
+	{"prior", 1, 0, 'p'},
         {"start_probs", 1, 0, 'P'},
         {"ignore_score_len", 1, 0, 'q'},
 	{"single_icm", 0, 0, 's'},
-	{"prior", 1, 0, 'r'},
         {"threshold", 1, 0, 't'},
         {"extend", 0, 0, 'X'},
         {"trans_table", 1, 0, 'z'},
@@ -789,11 +780,11 @@ static void  Parse_Command_Line
       };
 
    while  (! errflg && ((ch = getopt_long (argc, argv,
-        "A:b:C:E:fF:g:hi:lL:m:Mno:P:q:r:t:Xz:Z:",
+        "A:b:C:E:fF:g:hi:lL:m:Mno:p:P:q:t:Xz:Z:",
         long_options, & option_index)) != EOF))
 #else
    while  (! errflg && ((ch = getopt (argc, argv,
-        "A:b:C:E:fF:g:hi:lL:m:Mno:P:q:r:t:Xz:Z:")) != EOF))
+        "A:b:C:E:fF:g:hi:lL:m:Mno:p:P:q:t:Xz:Z:")) != EOF))
 #endif
 
      switch  (ch)
@@ -917,6 +908,18 @@ static void  Parse_Command_Line
               }
           break;
 
+       case  'p' :
+          Command_Line . append (" -p ");
+          Command_Line . append (optarg);
+          LogOdds_Prior = strtol (optarg, & p, 10);
+          if  (p == optarg)
+              {
+               fprintf (stderr, "ERROR:  Bad log likelihood ratio for prior (-p option)\n"
+                    "  value = \"%s\"", optarg);
+               errflg = true;
+              }
+          break;
+
         case  'P' :
           Command_Line . append (" -P ");
           Command_Line . append (optarg);
@@ -933,18 +936,6 @@ static void  Parse_Command_Line
               {
                fprintf (stderr, "ERROR:  Bad ignore independent model length\n"
                     "  (-q option)  value = \"%s\"", optarg);
-               errflg = true;
-              }
-          break;
-
-       case  'r' :
-          Command_Line . append (" -r ");
-          Command_Line . append (optarg);
-          LogOdds_Prior = strtol (optarg, & p, 10);
-          if  (p == optarg)
-              {
-               fprintf (stderr, "ERROR:  Bad log likelihood ratio for prior (-r option)\n"
-                    "  value = \"%s\"", optarg);
                errflg = true;
               }
           break;

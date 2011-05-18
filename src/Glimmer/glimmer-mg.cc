@@ -35,18 +35,14 @@ ICM_t  Gene_ICM;
   // part of genes.
 int  Gene_ID_Ct = 0;
   // Counter used to assign ID numbers to tentative genes
-bool  Genome_Is_Circular = DEFAULT_GENOME_IS_CIRCULAR;
+bool  Genome_Is_Circular = false;
   // If true, input sequences are assumed to be circularly connected
   // so genes will be allowed to wrap around the end
 char  * ICM_File_Name = NULL;
   // Name of the file containing the probability model
-char  * Ignore_File_Name = NULL;
-  // Name of file containing list of regions that cannot be included
-  // in gene predictions
 int  Ignore_Score_Len = INT_MAX;
   // Genes at least this long do not count the independent model
   // in their score
-vector <Range_t>  Ignore_Region;
 double  Indep_GC_Frac = -1.0;
   // GC proportion used in simple independent model.
   // Set from counts of input sequences or by -C option
@@ -93,20 +89,12 @@ int  Sequence_Len;
   // Length of genomic sequence string being processed.
 vector <const char *>  Start_Codon;
   // Sequences assumed to be start codons
-vector <double>  Start_Prob;
-  // Probability of occurrence of start codons
 vector <const char *>  Stop_Codon;
   // Sequences assumed to be stop codons
 string  Tag;
   // The fasta-header lines of the sequence in  Sequence
 int  Threshold_Score = DEFAULT_THRESHOLD_SCORE;
   // Minimum score for an orf to be considered a potential gene
-bool  Use_First_Start_Codon = DEFAULT_USE_FIRST_START_CODON;
-  // If true, automatically use the earliest start codon in a gene;
-  // otherwise, try to choose the best start codon
-bool  Use_Independent_Score = DEFAULT_USE_INDEPENDENT_SCORE;
-  // If true, let the non-Markov independent model compete with
-  // the periodic Markov models to score genes.
 
 ////////////////////////////////////////////
 // Dave's variables
@@ -251,12 +239,7 @@ int  main
 
 	  Parse_Command_Line (argc, argv);
 
-	  if  (Ignore_File_Name != NULL)
-	       Get_Ignore_Regions ();
-
-	  // outdated start codon code
 	  Set_Start_And_Stop_Codons ();
-	  Prob_To_Logs (Start_Prob);
 
 	  // open output files
 	  if(Detail_Log) {
@@ -617,40 +600,24 @@ static void  Echo_General_Settings
    fprintf (fp, "Sequence file = %s\n", Sequence_File_Name);
    fprintf (fp, "Number of sequences = %d\n", Sequence_Ct);
    fprintf (fp, "ICM model file = %s\n", ICM_File_Name);
-   fprintf (fp, "Excluded regions file = %s\n",
-        Printable (Ignore_File_Name));
 
-   fprintf (fp, "Independent (non-coding) scores %s used\n",
-        Use_Independent_Score ? "are" : "are NOT");
    fprintf (fp, "Circular genome = %s\n", Printable (Genome_Is_Circular));
 
    fprintf (fp, "Truncated orfs = %s\n", Printable (Allow_Truncated_Orfs));
    fprintf (fp, "Minimum gene length = %d bp\n", Min_Gene_Len);
    fprintf (fp, "Maximum overlap bases = %d\n", Max_Olap_Bases);
    fprintf (fp, "Threshold score = %d\n", Threshold_Score);
-   fprintf (fp, "Use first start codon = %s\n",
-	    Printable (Use_First_Start_Codon));
    if  (Genbank_Xlate_Code != 0)
 	fprintf (fp, "Translation table = %d\n", Genbank_Xlate_Code);
    fprintf (fp, "Start codons = ");
    Print_Comma_Separated_Strings (Start_Codon, fp);
-   fputc ('\n', fp);
-   fprintf (fp, "Start probs = ");
-   n = Start_Prob . size ();
-   for  (i = 0;  i < n;  i ++)
-   {
-	if  (i > 0)
-	     fputc (',', fp);
-	fprintf (fp, "%.3f", Start_Prob [i]);
-   }
    fputc ('\n', fp);
    fprintf (fp, "Stop codons = ");
    Print_Comma_Separated_Strings (Stop_Codon, fp);
    fputc ('\n', fp);
 
    fprintf (fp, "GC percentage = %.1f%%\n", 100.0 * Indep_GC_Frac);
-   if  (Use_Independent_Score)
-       fprintf (fp, "Ignore score on orfs longer than %s\n",
+   fprintf (fp, "Ignore score on orfs longer than %s\n",
             Num_Or_Max (Ignore_Score_Len));
 
    return;
@@ -793,26 +760,19 @@ static void  Parse_Command_Line
 #if  ALLOW_LONG_OPTIONS
    int  option_index = 0;
    static struct option  long_options [] = {
-        {"start_codons", 1, 0, 'A'},
         {"rbs_pwm", 1, 0, 'b'},
-        {"gc_percent", 1, 0, 'C'},
-        {"first_codon", 0, 0, 'f'},
+	{"class", 1, 0, 'c'},
 	{"features", 1, 0, 'F'},
         {"gene_len", 1, 0, 'g'},
         {"help", 0, 0, 'h'},
-        {"ignore", 1, 0, 'g'},
-        {"linear", 0, 0, 'l'},
-        {"orf_coords", 1, 0, 'L'},
+	{"indel", 0, 0, 'i'},
 	{"icm", 1, 0, 'm'},
-	{"indel", 0, 0, 'I'},
-	{"sub", 0, 0, 'S'},
-        {"no_indep", 0, 0, 'n'},
         {"max_olap", 1, 0, 'o'},
-        {"start_probs", 1, 0, 'P'},
-        {"ignore_score_len", 1, 0, 'q'},
-	{"quality", 1, 0, 'Q'},
+	{"prior", 1, 0, 'p'},
+	{"quality", 1, 0, 'q'},
+	{"circular", 0, 0, 'r'},
 	{"single_icm", 0, 0, 's'},
-	{"prior", 1, 0, 'r'},
+	{"sub", 0, 0, 'S'},
         {"threshold", 1, 0, 't'},
         {"extend", 0, 0, 'X'},
         {"trans_table", 1, 0, 'z'},
@@ -821,27 +781,15 @@ static void  Parse_Command_Line
       };
 
    while  (! errflg && ((ch = getopt_long (argc, argv,
-        "A:b:c:C:fF:g:hi:IlL:m:no:P:q:Q:r:sSt:Xz:Z:",
+        "b:c:F:g:hi:Im:o:p:P:q:rsSt:Xz:Z:",
         long_options, & option_index)) != EOF))
 #else
    while  (! errflg && ((ch = getopt (argc, argv,
-        "A:b:c:C:fF:g:hi:IlL:m:no:P:q:Q:r:sSt:Xz:Z:")) != EOF))
+        "b:c:F:g:hi:Im:o:p:P:q:rsSt:Xz:Z:")) != EOF))
 #endif
 
      switch  (ch)
        {
-        case  'A' :
-          Command_Line . append (" -A ");
-          Command_Line . append (optarg);
-          Start_Codon . clear ();
-          for  (p = strtok (optarg, ",");  p != NULL;  p = strtok (NULL, ","))
-            {
-             q = strdup (p);
-             Make_Lower_Case (q);
-             Start_Codon . push_back (q);
-            }
-          break;
-
         case  'b' :
           Command_Line . append (" -b ");
           Command_Line . append (optarg);
@@ -861,31 +809,13 @@ static void  Parse_Command_Line
 	    Parse_Classes(optarg);
 	    break;
 
-        case  'C' :
-          Command_Line . append (" -C ");
-          Command_Line . append (optarg);
-          Indep_GC_Frac = strtod (optarg, & p) / 100.0;
-          if  (p == optarg || Indep_GC_Frac < 0.0 || Indep_GC_Frac > 100.0)
-              {
-               fprintf (stderr, "ERROR:  Bad independent model GC fraction (-C option)\n"
-                    "  value = \"%s\"", optarg);
-               errflg = true;
-              }
-          GC_Frac_Set = true;
-          break;
-
-        case  'f' :
-          Command_Line . append (" -f");
-          Use_First_Start_Codon = true;
-          break;
-
        case 'F' :
 	    Command_Line.append(" -F");
 	    Command_Line.append(optarg);
 	    Feature_File = optarg;
 	    break;
 
-        case  'g' :
+       case  'g' :
           Command_Line . append (" -g ");
           Command_Line . append (optarg);
           Min_Gene_Len = strtol (optarg, & p, 10);
@@ -897,26 +827,15 @@ static void  Parse_Command_Line
               }
           break;
 
-        case  'h' :
+       case  'h' :
           Command_Line . append (" -h");
           errflg = true;
-          break;
-
-        case  'i' :
-          Command_Line . append (" -i ");
-          Command_Line . append (optarg);
-          Ignore_File_Name = optarg;
           break;
 
        case  'I' :
 	  Command_Line . append (" -I ");
 	  Allow_Indels = true;
 	  break;
-
-        case  'l' :
-          Command_Line . append (" -l");
-          Genome_Is_Circular = false;
-          break;
 	 
        case  'm' :
 	    Command_Line . append (" -m ");
@@ -925,12 +844,7 @@ static void  Parse_Command_Line
 	    User_ICM = true;
 	    break;
 
-       case  'n' :
-          Command_Line . append (" -n");
-          Use_Independent_Score = false;
-          break;
-
-        case  'o' :
+       case  'o' :
           Command_Line . append (" -o ");
           Command_Line . append (optarg);
           Max_Olap_Bases = strtol (optarg, & p, 10);
@@ -942,44 +856,29 @@ static void  Parse_Command_Line
               }
           break;
 
-        case  'P' :
-          Command_Line . append (" -P ");
+       case  'p' :
+          Command_Line . append (" -p ");
           Command_Line . append (optarg);
-          Start_Prob . clear ();
-          for  (p = strtok (optarg, ",");  p != NULL;  p = strtok (NULL, ","))
-            Start_Prob . push_back (strtod (p, NULL));
-          break;
-
-        case  'q' :
-          Command_Line . append (" -q ");
-          Command_Line . append (optarg);
-          Ignore_Score_Len = strtol (optarg, & p, 10);
-          if  (p == optarg || Ignore_Score_Len < 0)
+          LogOdds_Prior = strtol (optarg, & p, 10);
+          if  (p == optarg)
               {
-               fprintf (stderr, "ERROR:  Bad ignore independent model length\n"
-                    "  (-q option)  value = \"%s\"", optarg);
+               fprintf (stderr, "ERROR:  Bad log likelihood ratio for prior (-p option)\n"
+                    "  value = \"%s\"", optarg);
                errflg = true;
               }
           break;
 
-       case 'Q' :
+       case 'q' :
 	    Command_Line . append (" -Q ");
 	    Command_Line . append (optarg);
 	    Allow_Indels = true;
 	    Quality_File_Name = optarg;
 	    break;
 
-       case  'r' :
-          Command_Line . append (" -r ");
-          Command_Line . append (optarg);
-          LogOdds_Prior = strtol (optarg, & p, 10);
-          if  (p == optarg)
-              {
-               fprintf (stderr, "ERROR:  Bad log likelihood ratio for prior (-r option)\n"
-                    "  value = \"%s\"", optarg);
-               errflg = true;
-              }
-          break;
+       case 'r' :
+	    Command_Line . append (" -r ");
+	    Genome_Is_Circular = true;
+	    break;
 
        case 's' :
 	    Command_Line . append (" -s");
@@ -2405,7 +2304,7 @@ static void  Usage
 
   {
    fprintf (stderr,
-       "USAGE:  glimmer3 [options] <sequence-file> <icm-file> <tag>\n"
+       "USAGE:  glimmer-mg [options] <sequence-file> <icm-file> <tag>\n"
        "\n"
        "Read DNA sequences in <sequence-file> and predict genes\n"
        "in them using the Interpolated Context Model in <icm-file>.\n"
@@ -2413,53 +2312,43 @@ static void  Usage
        "file <tag>.predict\n"
        "\n"
        "Options:\n"
-       " -A <codon-list>\n"
-       " --start_codons <codon-list>\n"
-       "    Use comma-separated list of codons as start codons\n"
-       "    Sample format:  -A atg,gtg\n"
-       "    Use -P option to specify relative proportions of use.\n"
-       "    If -P not used, then proportions will be equal\n"
        " -b <filename>\n"
        " --rbs_pwm <filename>\n"
        "    Read a position weight matrix (PWM) from <filename> to identify\n"
        "    the ribosome binding site to help choose start sites\n"
-       " -C <p>\n"
-       " --gc_percent <p>\n"
-       "    Use <p> as GC percentage of independent model\n"
-       "    Note:  <p> should be a percentage, e.g., -C 45.2\n"
-       " -f\n"
-       " --first_codon\n"
-       "    Use first codon in orf as start codon\n"
+       " -c <filename>\n"
+       " --class <filename>\n"
+       "    Read the sequences classifications from <filename> formatted\n"
+       "    as \"fasta_header     genome1 genome2 genome3 ...\n"
+       " -F <filename>\n"
+       " --features <filename>\n"
+       "    Read feature counts for a specific organism from <filename>.\n"
+       "    See manual for more information.\n"
        " -g <n>\n"
        " --gene_len <n>\n"
        "    Set minimum gene length to <n>\n"
        " -h\n"
        " --help\n"
        "    Print this message\n"
-       " -i <filename>\n"
-       " --ignore <filename>\n"
-       "    <filename> specifies regions of bases that are off \n"
-       "    limits, so that no bases within that area will be examined\n"
-       " -l\n"
-       " --linear\n"
-       "    Assume linear rather than circular genome, i.e., no wraparound\n"
+       " -i\n"
+       " --indel\n"
+       "    Predict genes in \"indel-mode\" where gene predictions may shift\n"
+       "    the coding frame, implicitly predicting an insertion or deletion\n"
+       "    in the sequence.\n"
+       " -m <filename>\n"
+       " --icm <filename>\n"
+	    "    Read ICM from <filename> and use to score ORF coding likelihood\n"
        " -o <n>\n"
        " --max_olap <n>\n"
        "    Set maximum overlap length to <n>.  Overlaps this short or shorter\n"
        "    are ignored.\n"
-       " -P <number-list>\n"
-       " --start_probs <number-list>\n"
-       "    Specify probability of different start codons (same number & order\n"
-       "    as in -A option).  If no -A option, then 3 values for atg, gtg and ttg\n"
-       "    in that order.  Sample format:  -P 0.6,0.35,0.05\n"
-       "    If -A is specified without -P, then starts are equally likely.\n"
        " -q <n>\n"
        " --ignore_score_len <n>\n"
        "    Do not use the initial score filter on any gene <n> or more\n"
        "    base long\n"
        " -r\n"
-       " --no_indep\n"
-       "    Don't use independent probability score column\n"
+       " --circular\n"
+       "    Assume circular rather than linear genome, i.e., allow wraparound\n"
        " -t <n>\n"
        " --threshold <n>\n"
        "    Set threshold score for calling as gene to n.  If the in-frame\n"

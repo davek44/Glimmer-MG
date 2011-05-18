@@ -20,6 +20,19 @@ bool Length_Log = false;
 bool Detail_Log = false;
 bool Sequence_Log = false;
 
+// Glimmer3 specific
+char  * Ignore_File_Name = NULL;
+  // Name of file containing list of regions that cannot be included
+  // in gene predictions
+vector <Range_t>  Ignore_Region;
+vector <double>  Start_Prob;
+  // Probability of occurrence of start codons
+bool  Use_Independent_Score = DEFAULT_USE_INDEPENDENT_SCORE;
+  // If true, let the non-Markov independent model compete with
+  // the periodic Markov models to score genes.
+
+
+// Glimmer-MG specific
 vector< pair<double,int> > Meta_PWM_Save;
   // Saved PWM scores so we don't recompute
 vector<PWM_t>  Meta_Ribosome_PWMs;

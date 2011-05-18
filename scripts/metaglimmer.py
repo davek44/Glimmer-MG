@@ -25,7 +25,7 @@ def main():
     parser.add_option('-o', dest='output_file', help='Prefix for output files. Default uses fasta file name.')
     parser.add_option('--iter', dest='iterate', type='int', default=0, help='Iterate Glimmer by re-training on the initial predictions, thus assuming the sequences came from the same organism. [Default=%default]')
     parser.add_option('-q', dest='quality_file', help='Quality value file')
-    parser.add_option('-i','--indels', dest='indels', action='store_true', default=False, help='Allow Glimmer to call indels')
+    parser.add_option('-i','--indel', dest='indel', action='store_true', default=False, help='Allow Glimmer to call indels')
     parser.add_option('--single_cluster', dest='single_cluster', default=False, 
 action='store_true', help='Rather than cluster the sequences using PhyScimm, treat the sequences as having come from a single genome/cluster. [Default=%default]')
     parser.add_option('--single_icm', dest='single_icm', default=False, action='store_true', help='Use coding ICMs trained on single organisms only [Default=%default]')
@@ -98,7 +98,7 @@ action='store_true', help='Rather than cluster the sequences using PhyScimm, tre
     # determine glimmer options
     g3_cmd = glimmer_options(options)
     if options.quality_file:
-        qual_str = '-Q %s' % options.quality_file
+        qual_str = '-q %s' % options.quality_file
     else:
         qual_str = ''
 
@@ -121,7 +121,7 @@ action='store_true', help='Rather than cluster the sequences using PhyScimm, tre
 
         # no clustering
         if options.single_cluster:
-            repredict(g3_cmd, sequence_file, output_file, class_file, options.iterate, options.filter_t, options.all_features, options.indels, qual_str)
+            repredict(g3_cmd, sequence_file, output_file, class_file, options.iterate, options.filter_t, options.all_features, options.indel, qual_str)
 
         # clustering
         else:
@@ -138,7 +138,7 @@ action='store_true', help='Rather than cluster the sequences using PhyScimm, tre
             # repredict within clusters
             predict_out = open(output_file+'.predict', 'w')
             for clust_sequence_file in glob.glob('cluster*fa'):                
-                cluster_repredict(g3_cmd, clust_sequence_file, class_file, output_file, options.iterate, options.filter_t, options.all_features, options.indels, options.quality_file)
+                cluster_repredict(g3_cmd, clust_sequence_file, class_file, output_file, options.iterate, options.filter_t, options.all_features, options.indel, options.quality_file)
                 combine_predictions(predict_out, sequence_scores, clust_sequence_file, output_file)
             predict_out.close()
 
@@ -213,7 +213,7 @@ def cluster_repredict(g3_cmd, sequence_file, all_class_file, all_output_file, it
     # make cluster quality file
     if quality_file:
         make_cluster_quality(cluster_reads, sequence_file, quality_file, output_file)
-        qual_str = '-Q %s.qual' % output_file
+        qual_str = '-q %s.qual' % output_file
     else:
         qual_str = ''
 
@@ -383,13 +383,13 @@ def get_transl_table(sequence_file, output_file):
 # Determine Glimmer options
 ################################################################################
 def glimmer_options(options):
-    cmd = '%s/glimmer-mg%s -l -X -o50 -g75 -t30' % (bin_dir, options.glim_suffix)
+    cmd = '%s/glimmer-mg%s' % (bin_dir, options.glim_suffix)
 
     if options.single_icm:
         cmd += ' --single_icm'
 
     if options.indels or options.quality_file:
-        cmd += ' -I'
+        cmd += ' -i'
 
     return cmd
 

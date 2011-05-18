@@ -43,9 +43,8 @@ errors are encouraged to report them to
 microbial DNA sequences.  The system works by creating a
 variable-length Markov model from a training set of genes and then
 using that model to attempt to identify all genes in a given DNA
-sequence.  Version~1 of \Glimmer{} was described in~\cite{glimmer1},
-Version~2 was described in~\cite{glimmer2}. and Version~3 was
-described in~\cite{glimmer3}.
+sequence.  The three versions of \Glimmer{} are described
+in~\cite{glimmer1},~\cite{glimmer2}, and~\cite{glimmer3}.
 
 \Gmg{} is released as OSI Certified Open Source Software under the
 Artistic License.  The license is contained in the file, \Pg{LICENSE},
@@ -61,15 +60,19 @@ Mac OSX.
 To install \Gmg{}, download the compressed tarfile
 \,\verb`glimmer-mg-1.0.1.tar.gz`\,
 from the website.  Then uncompress the file by typing
-\BSV\begin{verbatim}
+\BSV
+\begin{verbatim}
   tar xzf glimmer-mg.1.0.1.tar.gz
-\end{verbatim}\ESV
+\end{verbatim}
+\ESV
 A directory named \,\verb`glimmer-mg`\, should result.
 In that directory, is a subdirectory named \,\verb`src`\,.
 Within the \,\verb`src`\, subdirectory type
-\BSV\begin{verbatim}
+\BSV
+\begin{verbatim}
   make
-\end{verbatim}\ESV
+\end{verbatim}
+\ESV
 (or alternately \Pg{gmake}).
 This will compile the \Gmg{} programs
 and put the executable files in the directory
@@ -98,9 +101,9 @@ pipeline.
 glimmer-mg.py seqs.fasta
 \end{verbatim}
 \ESV
-This script will classify the sequences with \Phymm{}, make initial
-predictions for all sequences, cluster the sequences with \Scimm{},
-and make final predictions within each cluster.
+This script will classify the sequences with \Phymm{}~\cite{phymm},
+make initial predictions for all sequences, cluster the sequences with
+\Scimm{}~\cite{scimm}, and make final predictions within each cluster.
 
 % Running everything, no re-predictions
 \subsubsection{Running from scratch with no retraining}
@@ -176,7 +179,7 @@ glimmer-mg.py --sub illumina.fasta
 \section{Sample Run Directory}
 
 A directory containing a sample run of \Gthree{} is provided.
-This directory, named \,\Pg{sample-run}\, contains the genome sequence
+This directory, named \,\Pg{sample\_run}\, contains the genome sequence
 for \emph{Treponema pallidum} (file \,\Pg{tpall.fna}\,)
 and a list of annotated genes for it (file \,\Pg{tpall.nh}\,),
 both downloaded from GenBank.
@@ -211,26 +214,16 @@ scripts to be able to run them (see Section~\ref{script:sec} above).
 This is the main program that makes gene preditions.
 
 \subsubsection{\Pg{glimmer-mg} Parameters \& Options}
-The invocation for \,\Pg{glimmer3}\, is:
+The invocation for \,\Pg{glimmer-mg}\, is:
 \bq
-  \Pg{glimmer3}\, [\Desc{options}] \Desc{sequence} \Desc{icm} \Desc{tag}
+  \Pg{glimmer-mg}\, [\Desc{options}] \Desc{sequence} \Desc{tag}
 \eq
 where \Desc{sequence} is the name of the file containing the DNA
-sequence(s) to be analyzed and \Desc{icm} is the name of the file
-containing the ICM model produced by \,\verb`build-icm`\,.  \Desc{tag}
-is a prefix used to name the two output files:  \Desc{tag}\verb`.detail`
-and \Desc{tag}\verb`.predict`.
+sequence(s) to be analyzed and \Desc{tag} is a prefix used to name the
+output files.
 
 \Desc{options} can be the following:
 \bl{}\RaggedRight
-\exdent
-  \verb`-A` \Desc{codon-list} \enskip or \enskip \verb`--start_codons` \Desc{codon-list}
-
-  Specify start codons as a comma-separated list.
-  Sample format:  \,\verb`-A atg,gtg`\,.
-  The default start codons are \Pg{atg}, \Pg{gtg} and \Pg{ttg}.
-  Use the \Pg{-P} option to specify the relative proportions of use.
-  If \Pg{-P} is not used, then the proportions will be equal.
 
 \exdent
   \verb`-b` \Desc{filename} \enskip or \enskip \verb`--rbs_pwm` \Desc{filename}
@@ -253,40 +246,39 @@ t      64      70      34       0      73      49
   frequencies of nucleotides at each position.
 
 \exdent
-  \verb`-C` \Desc{p} \enskip or \enskip \verb`--gc_percent` \Desc{p}
+  \verb`-c` \Desc{filename} \enskip or \enskip \verb`--class` \Desc{filename}
 
-  Use \Desc{p} as the GC percentage of the independent model, \ie,
-  the model of intergenic sequence.
-  Note:  \Desc{p} should be a percentage, \eg, \verb`-C 45.2`
+  Read sequence classifications from \Desc{filename}. Each line of
+  \Desc{filename} should specify a sequence fasta header followed by a
+  series of GenBank reference genome classifications. The
+  classifications should name the reference genome's Phymm directory
+  (corresponding to the GenBank strain name), followed by the
+  character '$|$', followed by the genomic sequence's unique
+  identifier. It is our expectation that users will not create these
+  files, but they generate them with \,\Pg{glimmer-mg.py}\,. For
+  example:
 
-  If this option is not specified, the GC percentage will be
-  counted from the input file.
-
-\exdent
-  \verb`-E` \Desc{filename} \enskip or \enskip \verb`--entropy` \Desc{filename}
-
-  Read entropy profiles from \Desc{filename}.  The format is one header
-  line, then 20 lines of 3 columns each, which is the format produced
-  by the program \Pg{entropy-profile} with the \Pg{-b} option.
-  The columns are amino acid,
-  positive entropy, and negative entropy, respectively.  Rows must be in
-  alphabetical order by amino acid code letter.  This currently does
-  not affect \Gthree{} predictions, but is used in
-  the \Pg{long-orfs} program.  If the option is specified, the
-  entropy-distance ratio for each potential gene is printed as the last column
-  of the \Pg{.detail} file.  If \Desc{filename} is ``\Pg{\#}'', then
-  a set of default entropy profiles, constructed from a wide range of
-  species, is used.
+\BSV
+\footnotesize{
+\begin{verbatim}
+read1     Mycobacterium_leprae_Br4923|NC_011896 Corynebacterium_glutamicum_ATCC_13032|NC_003450
+read2     Rhodopseudomonas_palustris_BisA53|NC_008435 Rhodopseudomonas_palustris_HaA2|NC_007778
+...
+\end{verbatim}
+}
+\ESV
 
 \exdent
- \verb` -f` \enskip or \enskip \verb`--first_codon`
+  \verb`-F` \Desc{filename} \enskip or \enskip \verb`--features` \Desc{filename}
 
-  Use the first possible codon in an orf as the start codon
-  for initial scoring purposes.  Otherwise, the highest-scoring
-  codon will be used.  This only affects the start positions in
-  the \,\verb`.detail`\, file.  The final start predictions in
-  the \,\verb`.predict`\, file are always based on the scoring
-  functions.
+  \Desc{filename} specifies counts for features such as gene length,
+  start codon usage, adjacent gene orientations, and adjacent gene
+  distances for coding and noncoding ORFs. \Gmg{} will convert these
+  counts into probability models for use in log-likelihood
+  computations for the features. It is our expecation that users will
+  not create these files, but generate them with
+  \,\Pg{train\_features.py}\, (via \,\Pg{glimmer-mg.py}\,). For an
+  example of the input format, see the \,\Pg{sample\_run}\, directory.
 
 \exdent
   \verb`-g` \Desc{n} \enskip or \enskip \verb`--gene_len` \Desc{n}
@@ -300,61 +292,22 @@ t      64      70      34       0      73      49
   Print the usage message.
 
 \exdent
-  \verb`-i` \Desc{filename} \enskip or \enskip \verb`--ignore` \Desc{filename}
+  \verb`-i` \enskip or \enskip \verb`--indel`
 
-  \Desc{filename} specifies regions of bases that are off 
-  limits, so that no bases within that area will be examined.
-  The format for entries in this file is one line per region,
-  with the start and end positions of the region specified
-  as the first two fields on the line.  The rest of the line
-  is regarded as comments.  Additionally, any line beginning
-  with a \,\verb`#`\, is regarded as a comment.  \Eg, the
-  following file:
-\BSV
-\begin{verbatim}
-   1001     1600   Comment here
-# The region can be specified high-low as well as low-high
-   5600     5001
-\end{verbatim}
-\ESV
-  would ignore bases $1001 \ldots 1600$ and $5001 \ldots 5600$
-  in the input sequence.  This option should not be used with
-  multi-sequence input files.
+  Predict genes in ``indel-mode'' where gene predictions may shift the
+  coding frame, implicitly predicting an insertion or deletion in the
+  sequence. If quality values are provided with the \verb`-q` option,
+  positions at which frame shifts should be considered will be
+  identifed by their low quality. If no quality values are provided,
+  frame shifts will be considered at long homopolymer runs, assuming
+  that the sequences were generated by the 454 or Ion torrent
+  technologies.
 
 \exdent
-  \verb`-l` \enskip or \enskip \verb`--linear`
+  \verb`-m` \Desc{filename} \enskip or \enskip \verb`--icm` \Desc{filename}
 
-  Assume a linear rather than circular genome, \ie, there will
-  be no genes that ``wraparound'' between the beginning and end
-  of the sequence.
-
-\exdent
-  \verb`-L` \Desc{filename} \enskip or \enskip \verb`--orf_coords` \Desc{filename}
-
-  \Desc{filename} specifies a list of orfs that should
-  be scored separately, with no attempt to resolve overlaps or
-  determine start codons.  The format of the
-  list is one orf per line, with entries separated by white space.
-  The first entry is an identifier for the orf.  It can be an
-  arbitrary string without spaces.  The next two entries are
-  the start and end positions of the orf, respectively, (coordinates counting
-  from 1), including the stop codon.  The fourth entry is the
-  reading frame.  This is used only to determine the direction of
-  the orf in cases of circular genomes where the orf might ``wrap
-  around'' the end of the input sequence.  If positive the
-  orf is presumed to be on the positive DNA strand; otherwise,
-  on the negative strand.  Any further entries on the line are ignored.
-
-  The output with this option goes both to the \Pg{.predict} file
-  and to the \Pg{.detail} file.
-
-\exdent
-  \verb`-M` \enskip or \enskip \verb`--separate_genes`
-
-  \Desc{sequence-file} is a multifasta file of separate genes to
-  be scored separately, with no overlap rules.  Each sequence
-  is assumed to be in $5'$ to $3'$ order and to include the stop
-  codon.
+  \Desc{filename} contains an ICM trained on coding sequence to be used
+  for ORF scoring rather than ICM's obtained via classification results.
 
 \exdent
   \verb`-o` \Desc{n} \enskip or \enskip \verb`--max_olap` \Desc{n}
@@ -365,29 +318,24 @@ t      64      70      34       0      73      49
   output genes that overlap by more than this many bases.
 
 \exdent
-  \verb`-P` \Desc{number-list} \enskip or \enskip \verb`--start_probs` \Desc{number-list}
+  \verb`-p` \Desc{n} \enskip or \enskip \verb`--prior` \Desc{n}
 
-  Specify the probability of different start codons (same number and order
-  as in \Pg{-A} option).  If no \Pg{-A} option is given, then there should be 3
-  values:  for \Pg{atg}, \Pg{gtg} and \Pg{ttg},
-  in that order.  Sample format:  \verb`-P 0.6,0.35,0.05`.
-  If \Pg{-A} is specified without \Pg{-P}, then each start codon is equally likely
-  (which is very unusual).
+  ...
 
 \exdent
-  \verb`-q` \Desc{n} \enskip or \enskip \verb`--ignore_score_len` \Desc{n}
+  \verb`-q` \Desc{filename} \enskip or \enskip \verb`--quality` \Desc{filename}
 
-  Consider any gene \Desc{n} or more bases long as a potential
-  gene, regardless of its in-frame score.
-  Without this option, this value is calculated automatically to
-  be the length such that the expected number of orfs this long
-  or longer in a random sequence of a million bases is one.
+  \Desc{filename} contains quality values in fasta format matching up
+  with the sequences fasta file. The quality values are used in
+  ``indel-mode'' and ``substitution-mode'' to identify low quality
+  positions in the sequences where errors are most likely.
 
 \exdent
-  \verb`-r` \enskip or \enskip \verb`--no_indep`
+  \verb`-r` \enskip or \enskip \verb`--circular`
 
-  Don't use the independent probability score column at all.  Using
-  this option will produce more short gene predictions.
+  Assume a circular rather than linear genome, \ie, there may
+  be genes that ``wraparound'' between the beginning and end
+  of the sequence.
 
 \exdent
   \verb`-t` \Desc{n} \enskip or \enskip \verb`--threshold` \Desc{n}
