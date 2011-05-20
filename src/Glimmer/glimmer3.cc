@@ -768,11 +768,10 @@ static void  Parse_Command_Line
         {"separate_genes", 1, 0, 'M'},
         {"no_indep", 0, 0, 'n'},
         {"max_olap", 1, 0, 'o'},
-	{"prior", 1, 0, 'p'},
         {"start_probs", 1, 0, 'P'},
         {"ignore_score_len", 1, 0, 'q'},
-	{"single_icm", 0, 0, 's'},
         {"threshold", 1, 0, 't'},
+	{"fudge", 1, 0, 'u'},
         {"extend", 0, 0, 'X'},
         {"trans_table", 1, 0, 'z'},
         {"stop_codons", 1, 0, 'Z'},
@@ -780,11 +779,11 @@ static void  Parse_Command_Line
       };
 
    while  (! errflg && ((ch = getopt_long (argc, argv,
-        "A:b:C:E:fF:g:hi:lL:m:Mno:p:P:q:t:Xz:Z:",
+        "A:b:C:E:fF:g:hi:lL:m:Mno:P:q:t:u:Xz:Z:",
         long_options, & option_index)) != EOF))
 #else
    while  (! errflg && ((ch = getopt (argc, argv,
-        "A:b:C:E:fF:g:hi:lL:m:Mno:p:P:q:t:Xz:Z:")) != EOF))
+        "A:b:C:E:fF:g:hi:lL:m:Mno:P:q:t:u:Xz:Z:")) != EOF))
 #endif
 
      switch  (ch)
@@ -908,18 +907,6 @@ static void  Parse_Command_Line
               }
           break;
 
-       case  'p' :
-          Command_Line . append (" -p ");
-          Command_Line . append (optarg);
-          LogOdds_Prior = strtol (optarg, & p, 10);
-          if  (p == optarg)
-              {
-               fprintf (stderr, "ERROR:  Bad log likelihood ratio for prior (-p option)\n"
-                    "  value = \"%s\"", optarg);
-               errflg = true;
-              }
-          break;
-
         case  'P' :
           Command_Line . append (" -P ");
           Command_Line . append (optarg);
@@ -950,6 +937,19 @@ static void  Parse_Command_Line
                     "  value = \"%s\"", optarg);
                errflg = true;
               }
+          break;
+
+       case  'u' :
+	  Command_Line . append (" -u ");
+          Command_Line . append (optarg);
+          LogOdds_Fudge = strtod (optarg, & p);
+          if  (p == optarg)
+              {
+               fprintf (stderr, "ERROR:  Bad value for fudge factor (-u option)\n"
+                    "  value = \"%s\"", optarg);
+               errflg = true;
+              }
+	  LogOdds_Prior += LogOdds_Fudge;
           break;
 
         case  'X' :

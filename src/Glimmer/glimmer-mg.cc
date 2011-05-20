@@ -9,7 +9,7 @@
 #include "glimmer-mg.hh"
 
 
-bool  Allow_Truncated_Orfs = false;
+bool  Allow_Truncated_Orfs = true;
   // If set true by -X option, then score orfs that
   // extend to the end of the sequence
 Event_Node_t  * Best_Event [6];
@@ -93,8 +93,6 @@ vector <const char *>  Stop_Codon;
   // Sequences assumed to be stop codons
 string  Tag;
   // The fasta-header lines of the sequence in  Sequence
-int  Threshold_Score = DEFAULT_THRESHOLD_SCORE;
-  // Minimum score for an orf to be considered a potential gene
 
 ////////////////////////////////////////////
 // Dave's variables
@@ -148,8 +146,6 @@ static bool User_Stop = false;
   // what should be taken from classifications
 static string ICM_dir = "/fs/szasmg3/dakelley/phymm3/.genomeData";
   // ICM directories
-static bool Double_ICM = true;
-  // Use ICMs constructed from pairs of genomes, rather tha single
 static vector<int> Fwd_Prev_Stops;
   // Saved positions of the previous forward stop codon for each sequence position
 static vector<int> Rev_Next_Stops;
@@ -464,7 +460,7 @@ static string Classes_ICM_File(vector<string> & seq_classes)
      vector<string> strain_nc1, strain_nc2;
      string icm_file;
 
-     if(Double_ICM && seq_classes.size() >= 2) {
+     if(seq_classes.size() >= 2) {
 
 	  // find best existing double
 	  bool icm2_found = false;
@@ -606,7 +602,6 @@ static void  Echo_General_Settings
    fprintf (fp, "Truncated orfs = %s\n", Printable (Allow_Truncated_Orfs));
    fprintf (fp, "Minimum gene length = %d bp\n", Min_Gene_Len);
    fprintf (fp, "Maximum overlap bases = %d\n", Max_Olap_Bases);
-   fprintf (fp, "Threshold score = %d\n", Threshold_Score);
    if  (Genbank_Xlate_Code != 0)
 	fprintf (fp, "Translation table = %d\n", Genbank_Xlate_Code);
    fprintf (fp, "Start codons = ");
@@ -768,24 +763,21 @@ static void  Parse_Command_Line
 	{"indel", 0, 0, 'i'},
 	{"icm", 1, 0, 'm'},
         {"max_olap", 1, 0, 'o'},
-	{"prior", 1, 0, 'p'},
 	{"quality", 1, 0, 'q'},
 	{"circular", 0, 0, 'r'},
-	{"single_icm", 0, 0, 's'},
-	{"sub", 0, 0, 'S'},
-        {"threshold", 1, 0, 't'},
-        {"extend", 0, 0, 'X'},
+	{"sub", 0, 0, 's'},
+	{"fudge", 1, 0, 'u'},
         {"trans_table", 1, 0, 'z'},
         {"stop_codons", 1, 0, 'Z'},
         {0, 0, 0, 0}
       };
 
    while  (! errflg && ((ch = getopt_long (argc, argv,
-        "b:c:F:g:hi:Im:o:p:P:q:rsSt:Xz:Z:",
+        "b:c:f:g:him:o:P:q:rsu:z:Z:",
         long_options, & option_index)) != EOF))
 #else
    while  (! errflg && ((ch = getopt (argc, argv,
-        "b:c:F:g:hi:Im:o:p:P:q:rsSt:Xz:Z:")) != EOF))
+        "b:c:f:g:him:o:P:q:rsu:z:Z:")) != EOF))
 #endif
 
      switch  (ch)
@@ -809,8 +801,8 @@ static void  Parse_Command_Line
 	    Parse_Classes(optarg);
 	    break;
 
-       case 'F' :
-	    Command_Line.append(" -F");
+       case 'f' :
+	    Command_Line.append(" -f");
 	    Command_Line.append(optarg);
 	    Feature_File = optarg;
 	    break;
@@ -832,8 +824,8 @@ static void  Parse_Command_Line
           errflg = true;
           break;
 
-       case  'I' :
-	  Command_Line . append (" -I ");
+       case  'i' :
+	  Command_Line . append (" -i");
 	  Allow_Indels = true;
 	  break;
 	 
@@ -856,18 +848,6 @@ static void  Parse_Command_Line
               }
           break;
 
-       case  'p' :
-          Command_Line . append (" -p ");
-          Command_Line . append (optarg);
-          LogOdds_Prior = strtol (optarg, & p, 10);
-          if  (p == optarg)
-              {
-               fprintf (stderr, "ERROR:  Bad log likelihood ratio for prior (-p option)\n"
-                    "  value = \"%s\"", optarg);
-               errflg = true;
-              }
-          break;
-
        case 'q' :
 	    Command_Line . append (" -Q ");
 	    Command_Line . append (optarg);
@@ -878,35 +858,25 @@ static void  Parse_Command_Line
        case 'r' :
 	    Command_Line . append (" -r ");
 	    Genome_Is_Circular = true;
+	    Allow_Truncated_Orfs = false;
 	    break;
 
        case 's' :
-	    Command_Line . append (" -s");
-	    Double_ICM = false;
-	    break;
-
-       case 'S' :
 	    Command_Line . append (" -S");
 	    Allow_Subs = true;
 	    break;
 
-        case  't' :
-          Command_Line . append (" -t ");
-          Command_Line . append (optarg);
-          Threshold_Score = strtol (optarg, & p, 10);
-          if  (p == optarg || Threshold_Score <= 0 || Threshold_Score >= 100)
-              {
-               fprintf (stderr, "ERROR:  Bad threshold score (-t option)\n"
-                    "  value = \"%s\"", optarg);
-               errflg = true;
-              }
-          break;
-
-        case  'X' :
-          Command_Line . append (" -X");
-          Allow_Truncated_Orfs = true;
-          Genome_Is_Circular = false;
-          break;
+       case  'u' :
+	    Command_Line . append (" -u ");
+	    Command_Line . append (optarg);
+	    LogOdds_Fudge = strtod (optarg, & p);
+	    if  (p == optarg) {
+		 fprintf (stderr, "ERROR:  Bad value for fudge factor (-u option)\n"
+			  "  value = \"%s\"", optarg);
+		 errflg = true;
+	    }
+	    LogOdds_Prior += LogOdds_Fudge;
+	    break;
 
         case  'z' :
           Command_Line . append (" -z ");
@@ -2104,7 +2074,7 @@ static void Update_Meta_Length()
      unsigned int s, l;
 
      string header_prefix = split(string(Fasta_Header))[0];
-     vector<string> Seq_Classes = classifications[header_prefix];     
+     vector<string> Seq_Classes = classifications[header_prefix];
 
      vector<double> lengths_gene;
      vector<double> lengths_non;
@@ -2320,7 +2290,7 @@ static void  Usage
        " --class <filename>\n"
        "    Read the sequences classifications from <filename> formatted\n"
        "    as \"fasta_header     genome1 genome2 genome3 ...\n"
-       " -F <filename>\n"
+       " -f <filename>\n"
        " --features <filename>\n"
        "    Read feature counts for a specific organism from <filename>.\n"
        "    See manual for more information.\n"
@@ -2349,14 +2319,13 @@ static void  Usage
        " -r\n"
        " --circular\n"
        "    Assume circular rather than linear genome, i.e., allow wraparound\n"
-       " -t <n>\n"
-       " --threshold <n>\n"
-       "    Set threshold score for calling as gene to n.  If the in-frame\n"
-       "    score >= <n>, then the region is given a number and considered\n"
-       "    a potential gene.\n"
-       " -X\n"
-       " --extend\n"
-       "    Allow orfs extending off ends of sequence to be scored\n"
+       " -s\n"
+       " --sub\n"
+       "    Predict genes in \"substitution-mode\" where gene predictions may\n"
+       "    predict a sequencing error in a stop codon and pass through it.\n"
+       " -u\n"
+       " --fudge\n"
+       "    Value to be added to the log-likelihood ratio score of every ORF.\n"
        " -z <n>\n"
        " --trans_table <n>\n"
        "    Use Genbank translation table number <n> for stop codons\n"

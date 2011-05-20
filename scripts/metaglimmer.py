@@ -28,7 +28,6 @@ def main():
     parser.add_option('-i','--indel', dest='indel', action='store_true', default=False, help='Allow Glimmer to call indels')
     parser.add_option('--single_cluster', dest='single_cluster', default=False, 
 action='store_true', help='Rather than cluster the sequences using PhyScimm, treat the sequences as having come from a single genome/cluster. [Default=%default]')
-    parser.add_option('--single_icm', dest='single_icm', default=False, action='store_true', help='Use coding ICMs trained on single organisms only [Default=%default]')
     parser.add_option('--long_orfs', dest='long_orfs', default=False, action='store_true', help='Generate the ICM to be used for the initial prediction iteration using the glimmer long-orfs program.')
 
     parser.add_option('-f','--filter', dest='filter_t', type='int', default=1, help=SUPPRESS_HELP)
@@ -385,9 +384,6 @@ def get_transl_table(sequence_file, output_file):
 def glimmer_options(options):
     cmd = '%s/glimmer-mg%s' % (bin_dir, options.glim_suffix)
 
-    if options.single_icm:
-        cmd += ' --single_icm'
-
     if options.indels or options.quality_file:
         cmd += ' -i'
 
@@ -536,10 +532,8 @@ def repredict(g3_cmd, sequence_file, output_file, class_file, iterations, filter
             next_iter = output_file
 
         retrain(sequence_file, prev_iter, filter_t, all_features, indels)
-        p = subprocess.Popen('%s -b %s.filt.motif -m %s.filt.gene.icm -F %s.filt.features.txt -c %s %s %s %s' %
+        p = subprocess.Popen('%s -b %s.filt.motif -m %s.filt.gene.icm -f %s.filt.features.txt -c %s %s %s %s' %
                   (g3_cmd, prev_iter, prev_iter, prev_iter, class_file, qual_str, sequence_file, next_iter), shell=True)
-#        p = subprocess.Popen('%s -m %s.filt.gene.icm -F %s.filt.features.txt -c %s %s %s' %
-#                             (g3_cmd, prev_iter, prev_iter, class_file, sequence_file, next_iter), shell=True)
         os.waitpid(p.pid, 0)
 
 
