@@ -22,7 +22,7 @@
 // Default values of global variables
 
 static const int  DEFAULT_MIN_GENE_LEN = 75;
-static const int  DEFAULT_MAX_OLAP_BASES = 30;
+static const int  DEFAULT_MAX_OLAP_BASES = 50;
 static const int  DEFAULT_RIBOSOME_WINDOW_SIZE = 20;
 static const double  DEFAULT_START_PROB []
      = {0.60, 0.30, 0.10};
