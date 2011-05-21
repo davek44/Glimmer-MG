@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, subprocess, stat
+import os, subprocess, glob, sys, stat
 
 ############################################################
 # install_glimmer.py
@@ -118,7 +118,9 @@ def main():
         os.chdir('src')
         p = subprocess.Popen('make clean; make', shell=True)
         os.waitpid(p.pid,0)
-        os.chdir('..')    
+        os.chdir('..')
+
+        set_awk_path()
 
         # build gene IMMs
         p = subprocess.Popen('scripts/train_all.py', shell=True)
@@ -131,6 +133,39 @@ def main():
         # make double icms
         p = subprocess.Popen('scripts/double_icms.py', shell=True)
         os.waitpid(p.pid, 0)
+
+
+############################################################
+# set_awk_path
+############################################################
+def set_awk_path():
+    # find awk
+    awk_path = ''
+    for path in os.environ['PATH'].split(':'):
+        if os.path.isfile(os.path.join(path,'awk')):
+            awk_path = os.path.join(path,'awk')
+            break
+
+    if awk_path == '':
+        print >> sys.stderr, 'Cannot find Awk'
+        exit(1)
+    else:
+        # change all scripts
+        for awkf in glob.glob('scripts/*.awk'):
+            os.rename(awkf,awkf+'.tmp')
+
+            newf = open(awkf, 'w')
+            print >> newf, '#!%s -f' % awk_path
+
+            oldf = open(awkf+'.tmp')
+            line = oldf.readline()
+            line = oldf.readline()
+            while line:
+                print >> newf, line,
+                line = oldf.readline()
+            oldf.close()
+
+            newf.close()
 
 
 ############################################################
