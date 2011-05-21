@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os, subprocess, glob, sys, stat
+import os, subprocess, glob, sys, stat, shutil
 
 ############################################################
 # install_glimmer.py
@@ -166,6 +166,8 @@ def set_awk_path():
             oldf.close()
 
             newf.close()
+            shutil.copymode(awkf+'.tmp', awkf)
+            os.remove(awkf+'.tmp')
 
 
 ############################################################
