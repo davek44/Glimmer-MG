@@ -532,7 +532,7 @@ def repredict(g3_cmd, sequence_file, output_file, class_file, iterations, filter
             next_iter = output_file
 
         retrain(sequence_file, prev_iter, filter_t, all_features, indels)
-        p = subprocess.Popen('%s -b %s.filt.motif -m %s.filt.gene.icm -f %s.filt.features.txt -c %s %s %s %s' %
+        p = subprocess.Popen('%s -b %s.filt.motif -m %s.filt.gicm -f %s.filt.features.txt -c %s %s %s %s' %
                   (g3_cmd, prev_iter, prev_iter, prev_iter, class_file, qual_str, sequence_file, next_iter), shell=True)
         os.waitpid(p.pid, 0)
 
