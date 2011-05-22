@@ -85,11 +85,11 @@ def main():
                         os.mkdir(icm_dir)
 
                     # if we're replacing all, or it doesn't exist
-                    if options.replace or not os.path.isfile('%s/%s.gene.icm' % (icm_dir,nc_num2)):
+                    if options.replace or not os.path.isfile('%s/%s.gicm' % (icm_dir,nc_num2)):
                         # make training command
                         tmp_fa = 'tmp.%s_%s.%s_%s.fasta' % (strain1,nc_num1,strain2,nc_num2)                        
                         cat_cmd = 'cat %s/%s/%s.gene.fasta %s/%s/%s.gene.fasta > %s' % (genome_dir,strain1,nc_num1,genome_dir,strain2,nc_num2,tmp_fa)
-                        build_cmd = '%s/build-icm -r %s/%s.gene.icm < %s' % (bin_dir,icm_dir,nc_num2,tmp_fa)
+                        build_cmd = '%s/build-icm -r %s/%s.gicm < %s' % (bin_dir,icm_dir,nc_num2,tmp_fa)
 
                         # hash to avoid duplicates
                         if options.condor:

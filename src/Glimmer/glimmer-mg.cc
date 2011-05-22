@@ -473,7 +473,7 @@ static string Classes_ICM_File(vector<string> & seq_classes)
 		    strain_nc1 = split(seq_classes[i], '|');
 	       }
 	       
-	       icm_file = ICM_dir + "/" + strain_nc1[0] + "/" + strain_nc1[1] + "_2/" + strain_nc2[0] + "/" + strain_nc2[1] + ".gene.icm";
+	       icm_file = ICM_dir + "/" + strain_nc1[0] + "/" + strain_nc1[1] + "_2/" + strain_nc2[0] + "/" + strain_nc2[1] + ".gicm";
 
 	       if(stat(icm_file.c_str(), &st_file_info) == 0)
 		    icm2_found = true;
@@ -482,14 +482,14 @@ static string Classes_ICM_File(vector<string> & seq_classes)
 	  if(!icm2_found) {
 	       // or just use single
 	       strain_nc1 = split(seq_classes[0], '|');
-	       icm_file = ICM_dir + "/" + strain_nc1[0] + "/" + strain_nc1[1] + ".gene.icm"; 
+	       icm_file = ICM_dir + "/" + strain_nc1[0] + "/" + strain_nc1[1] + ".gicm"; 
 	  }
 
      } else {
 
 	  // construct file name
 	  strain_nc1 = split(seq_classes[0], '|');
-	  icm_file = ICM_dir + "/" + strain_nc1[0] + "/" + strain_nc1[1] + ".gene.icm"; 
+	  icm_file = ICM_dir + "/" + strain_nc1[0] + "/" + strain_nc1[1] + ".gicm"; 
      }
 
      return icm_file;

@@ -39,7 +39,7 @@ TESTING = False
 # main
 ################################################################################
 def main():
-    usage = 'usage: %prog [options] <gbk_file>'
+    usage = 'usage: %prog [options]'
     parser = OptionParser(usage)
     parser.add_option('-l','--min_length', dest='min_length', type='int', default=75, help='Minimum length of gene (and ORF) in nucleotides to consider [default: %default]')
     parser.add_option('-o','--max_overlap', dest='max_overlap', type='int', default=50, help='Maximum overlap of two genes (or gene and ORF) to consider [default: %default]')
@@ -763,9 +763,9 @@ def build_icm(genes, seqs, hypothetical, out_prefix):
 
     # build-icm
     if bp_printed >= icm_train_bp_t:
-        if os.path.isfile('%s.gene.icm' % out_prefix):
-            os.remove('%s.gene.icm' % out_prefix)
-        os.system('%s/build-icm -r %s.gene.icm < %s.gene.fasta' % (bin_dir, out_prefix,out_prefix))
+        if os.path.isfile('%s.gicm' % out_prefix):
+            os.remove('%s.gicm' % out_prefix)
+        os.system('%s/build-icm -r %s.gicm < %s.gene.fasta' % (bin_dir, out_prefix,out_prefix))
     #os.remove('%s.gene.fasta' % out_prefix)
 
 
@@ -782,7 +782,7 @@ def build_icm_indels(seq_file, predict_file, out_prefix):
     os.remove('%s.faa' % out_prefix)
     os.rename('%s.ffn' % out_prefix, '%s.gene.fasta' % out_prefix)
 
-    p = subprocess.Popen('%s/build-icm -r %s.gene.icm < %s.gene.fasta' % (bin_dir,out_prefix,out_prefix), shell=True)
+    p = subprocess.Popen('%s/build-icm -r %s.gicm < %s.gene.fasta' % (bin_dir,out_prefix,out_prefix), shell=True)
     os.waitpid(p.pid, 0) 
 
 
