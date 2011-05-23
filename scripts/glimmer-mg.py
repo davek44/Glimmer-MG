@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from optparse import OptionParser, SUPPRESS_HELP
+from optparse import OptionParser, OptionGroup, SUPPRESS_HELP
 import os, sys, pdb, subprocess, glob, gzip
 
 ################################################################################
@@ -20,37 +20,7 @@ physcimm_bin = os.path.abspath('%s/../scimm/bin/physcimm.py' % scripts_dir)
 def main():
     usage = 'usage: %prog [options] <fasta file>'
     parser = OptionParser(usage)
-
-    # glimmer-mg options
-    parser.add_option('-o', dest='output_file', help='Prefix for output files. Default uses fasta file name.')
-    parser.add_option('--iter', dest='iterate', type='int', default=0, help='Iterate Glimmer by re-training on the initial predictions, thus assuming the sequences came from the same organism. [Default=%default]')
-    parser.add_option('-q', dest='quality_file', help='Quality value file')
-    parser.add_option('-i','--indel', dest='indel', action='store_true', default=False, help='Allow Glimmer to call indels')
-    parser.add_option('--single_cluster', dest='single_cluster', default=False, 
-action='store_true', help='Rather than cluster the sequences using PhyScimm, treat the sequences as having come from a single genome/cluster. [Default=%default]')
-    parser.add_option('--long_orfs', dest='long_orfs', default=False, action='store_true', help='Generate the ICM to be used for the initial prediction iteration using the glimmer long-orfs program.')
-
-    parser.add_option('-f','--filter', dest='filter_t', type='int', default=1, help=SUPPRESS_HELP)
-     # in iterative re-training, Glimmer score threshold
-    parser.add_option('--glim_suffix', dest='glim_suffix', default='', help=SUPPRESS_HELP)
-     # add a suffix to the glimmer binary in order to run a different version
-    parser.add_option('--ignore', dest='ignore', default=False, action='store_true', help=SUPPRESS_HELP)
-     # find the map.txt file and ignore each sequence's source ICM score
-    parser.add_option('--all_features', dest='all_features', default=False, action='store_true', help=SUPPRESS_HELP)
-     # retrain all features include length and adjacency models
-    parser.add_option('-t', dest='top_hits', type='int', default=3, help=SUPPRESS_HELP)
-     # number of Phymm top scoring genomes to use
-
-    # phymm options
-    parser.add_option('--raw', dest='raw_done', default=False, action='store_true', help='Do not classify sequences with Phymm because output file already exists. [Default=%default]')
-    parser.add_option('--class', dest='class_done', default=False, action='store_true', help='Do not classify sequences with Phymm or parse raw Phymm output because class.txt file already exists. [Default=%default]')
-    parser.add_option('-p', dest='proc', type='int', default=1, help='Number of processes to run [Default=%default]')
-
-    # physcimm options
-    parser.add_option('--clust', dest='clust_done', default=False, action='store_true', help='Do not cluster sequences with PhyScimm because output files already exists. [Default=%default]')
-    parser.add_option('--taxlevel', dest='taxlevel', default='family', help='Taxonomic level at which to cluster reads with Phymm [Default=%default]')
-    parser.add_option('--minbp_pct', dest='minbp_pct', type='float', default=.01, help='Minimum proportion of bp assigned to a class to become a cluster [Default=%default]')
-
+    add_options(parser)
     (options,args) = parser.parse_args()
     
     if len(args) != 1:
@@ -140,6 +110,59 @@ action='store_true', help='Rather than cluster the sequences using PhyScimm, tre
                 cluster_repredict(g3_cmd, clust_sequence_file, class_file, output_file, options.iterate, options.filter_t, options.all_features, options.indel, options.quality_file)
                 combine_predictions(predict_out, sequence_scores, clust_sequence_file, output_file)
             predict_out.close()
+
+
+################################################################################
+# add_options
+################################################################################
+def add_options(parser):
+    ############################################
+    # pipeline options
+    ############################################
+    parser.add_option('--iter', dest='iterate', type='int', default=1, help='Iterate Glimmer by re-training on the initial predictions, thus assuming the sequences came from the same organism. [Default=%default]')
+    parser.add_option('--long_orfs', dest='long_orfs', default=False, action='store_true', help='Generate the ICM to be used for the initial prediction iteration using the glimmer long-orfs program.  [Default: %default]')
+    parser.add_option('-o', dest='out', help='Prefix for output files. Default uses fasta file name.')
+    parser.add_option('-p', dest='proc', type='int', default=1, help='Number of processes to run. [Default=%default]')
+    parser.add_option('--single_cluster', dest='single_cluster', default=False, action='store_true', help='Rather than cluster the sequences using PhyScimm, treat the sequences as having come from a single genome/cluster. [Default=%default]')
+    parser.add_option('-t', dest='top_hits', type='int', default=3, help='Number of top Phymm classifications to use for training.  [Default: %default]')
+
+    # in iterative re-training, Glimmer score threshold
+    parser.add_option('--filter', dest='filter_t', type='float', default=1.0, help=SUPPRESS_HELP)
+    # add a suffix to the glimmer binary in order to run a different version
+    parser.add_option('--glim_suffix', dest='glim_suffix', default='', help=SUPPRESS_HELP)
+    # find the map.txt file and ignore each sequence's source ICM score
+    parser.add_option('--ignore', dest='ignore', default=False, action='store_true', help=SUPPRESS_HELP)
+    # retrain all features include length and adjacency models
+    parser.add_option('--all_features', dest='all_features', default=False, action='store_true', help=SUPPRESS_HELP)
+
+    ############################################
+    # glimmer-mg options
+    ############################################
+    glim_group = OptionGroup(parser, 'Glimmer')
+    #glim_group.add_option('-g', '--gene_len', dest='gene_len', type='int', default=75, help='Minimum gene length. Must match the training database. [Default: %default]')
+    glim_group.add_option('-i','--indel', dest='indel', action='store_true', default=False, help='Predict genes in "indel-mode" where gene predictions may shift the coding frame, implicitly predicting an insertion or deletion in the sequence. [Default: %default]')
+    glim_group.add_option('-q', dest='quality_file', help='Fasta file of Phred quality values matching up with the sequences fasta file to be used in "indel-mode" and "substitution-mode".')
+    glim_group.add_option('-r', '--circular', dest='circular', action='store_true', default=False, help='Assume circular rather than linear genome, i.e., allow wraparound. [Default: %default]')
+    glim_group.add_option('-s', '--sub', dest='sub', action='store_true', default=False, help='Predict genes in "substitution-mode" where gene predictions may predict a sequencing error in a stop codon and pass through it. [Default: %default]')
+    glim_group.add_option('-u', '--fudge', dest='fudge', type='float', default=1.0, help='Value to be added to the log-likelihood ratio score of every ORF. [Default: %default]')
+    parser.add_option_group(glim_group)
+
+    ############################################
+    # phymm options
+    ############################################
+    phymm_group = OptionGroup(parser, 'Phymm')
+    phymm_group.add_option('--raw', dest='raw_done', default=False, action='store_true', help='Do not classify sequences with Phymm because output file already exists. [Default=%default]')
+    phymm_group.add_option('--class', dest='class_done', default=False, action='store_true', help='Do not classify sequences with Phymm or parse raw Phymm output because class.txt file already exists. [Default=%default]')
+    parser.add_option_group(phymm_group)
+
+    ############################################
+    # physcimm options
+    ############################################
+    scimm_group = OptionGroup(parser, 'PhyScimm')
+    scimm_group.add_option('--clust', dest='clust_done', default=False, action='store_true', help='Do not cluster sequences with PhyScimm because output files already exists. [Default=%default]')
+    scimm_group.add_option('--taxlevel', dest='taxlevel', default='family', help='Taxonomic level at which to cluster reads with Phymm. [Default=%default]')
+    scimm_group.add_option('--minbp_pct', dest='minbp_pct', type='float', default=.01, help='Minimum proportion of bp assigned to a class to become a cluster. [Default=%default]')
+    parser.add_option_group(scimm_group)
 
 
 ################################################################################
