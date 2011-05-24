@@ -106,9 +106,10 @@ def main():
 
             # repredict within clusters
             predict_out = open(output_file+'.predict', 'w')
-            for clust_sequence_file in glob.glob('cluster*fa'):                
+            for clust_sequence_file in glob.glob('cluster*fa'):
                 cluster_repredict(g3_cmd, clust_sequence_file, class_file, output_file, options.iterate, options.filter_t, options.all_features, options.indel, options.quality_file)
                 combine_predictions(predict_out, sequence_scores, clust_sequence_file, output_file)
+                cluster_clean(clust_sequence_file, output_file)
             predict_out.close()
 
 
@@ -194,6 +195,24 @@ def classify(scores, genomes, top_hits):
 
 
 ################################################################################
+# cluster_clean
+#
+# Delete uninteresting temporary files. Assumes one iteration.
+################################################################################
+def cluster_clean(clust_sequence_file, all_output_file):
+    output_file = '%s.%s' % (all_output_file, clust_sequence_file[:-3])
+
+    os.remove('%s.class.txt' % output_file)
+    os.remove('%s.predict' % output_file)
+    os.remove('%s.run1.features.txt' % output_file)
+    os.remove('%s.run1.fpredict' % output_file)
+    os.remove('%s.run1.gene.fasta' % output_file)
+    os.remove('%s.run1.gicm' % output_file)
+    os.remove('%s.run1.motif' % output_file)
+    os.remove('%s.run1.predict' % output_file)
+
+
+################################################################################
 # cluster_repredict
 #
 # Retrain on initial gene predictions and re-predict genes within a cluster
@@ -258,7 +277,7 @@ def combine_predictions(predict_out, sequence_scores, clust_sequence_file, all_o
     # check for sufficient training data
     all_init = False
     gene_bp = 0
-    for line in open('%s.run1.filt.gene.fasta' % output_file):
+    for line in open('%s.run1.gene.fasta' % output_file):
         if line[0] != '>':
             gene_bp += len(line.rstrip())
     if gene_bp < min_gene_bp:
@@ -316,11 +335,11 @@ def combine_predictions(predict_out, sequence_scores, clust_sequence_file, all_o
                     print >> predict_out, line,
 
 
-############################################################
+################################################################################
 # data_integrity
 #
 # Check for uniqueness of headers.
-############################################################
+################################################################################
 def data_integrity(fasta_file):
     sequences = {}
     for line in open(fasta_file):
@@ -328,7 +347,7 @@ def data_integrity(fasta_file):
             r = line[1:].split()[0]
             if sequences.has_key(r):
                 print 'Sorry, Phymm only considers fasta headers up to the first whitespace.  Please make these unique in your file.  E.g. %s is not unique' % r
-                exit()
+                exit(1)
             sequences[r] = True
 
 
@@ -336,10 +355,10 @@ def data_integrity(fasta_file):
 # filter_predictions
 #
 # Filter Glimmer predictions before a training set is constructed for the
-# next iteration.
+# next iteration. Place in a similarly named file with the extension .fpredict
 ################################################################################
 def filter_predictions(predict_file, filter_t):
-    filt_out = open('%s.filt.predict' % os.path.splitext(predict_file)[0], 'w')
+    filt_out = open('%s.fpredict' % os.path.splitext(predict_file)[0], 'w')
     for line in open(predict_file):
         if line[0] == '>':
             print >> filt_out, line,
@@ -559,7 +578,7 @@ def repredict(g3_cmd, sequence_file, output_file, class_file, iterations, filter
             next_iter = output_file
 
         retrain(sequence_file, prev_iter, filter_t, all_features, indels)
-        p = subprocess.Popen('%s -b %s.filt.motif -m %s.filt.gicm -f %s.filt.features.txt -c %s %s %s %s' %
+        p = subprocess.Popen('%s -b %s.motif -m %s.gicm -f %s.features.txt -c %s %s %s %s' %
                   (g3_cmd, prev_iter, prev_iter, prev_iter, class_file, qual_str, sequence_file, next_iter), shell=True)
         os.waitpid(p.pid, 0)
 
@@ -579,14 +598,14 @@ def retrain(sequence_file, prev_iter, filter_t, all_features, indels):
     filter_predictions('%s.predict' % prev_iter, filter_t)
 
     # train
-    p = subprocess.Popen('%s/train_features.py -f %s --seq %s --predict %s.filt.predict' % (scripts_dir,indel_str,sequence_file,prev_iter), shell=True)
+    p = subprocess.Popen('%s/train_features.py -f %s --seq %s --predict %s.fpredict' % (scripts_dir,indel_str,sequence_file,prev_iter), shell=True)
     os.waitpid(p.pid, 0)
 
     # only keep start codons
     if not all_features:
-        feat_out = open('%s.filt.features.tmp' % prev_iter, 'w')
+        feat_out = open('%s.features.tmp' % prev_iter, 'w')
         be_printing = False
-        for line in open('%s.filt.features.txt' % prev_iter):
+        for line in open('%s.features.txt' % prev_iter):
             if line.startswith('DIST START'):
                 be_printing = True
             elif line.startswith('DIST'):
@@ -595,7 +614,7 @@ def retrain(sequence_file, prev_iter, filter_t, all_features, indels):
             if be_printing:
                 print >> feat_out, line,
         feat_out.close()
-        os.rename('%s.filt.features.tmp' % prev_iter, '%s.filt.features.txt' % prev_iter)
+        os.rename('%s.features.tmp' % prev_iter, '%s.features.txt' % prev_iter)
              
  
 ################################################################################
