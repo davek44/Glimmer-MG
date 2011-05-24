@@ -29,7 +29,7 @@ def main():
         sequence_file = args[0]
 
     if options.output_file:
-        output_file = options.output_file
+        output_file = options.out
     else:
         output_file = os.path.splitext(sequence_file)[0]
     
@@ -405,10 +405,14 @@ def get_transl_table(sequence_file, output_file):
 # Determine Glimmer options
 ################################################################################
 def glimmer_options(options):
-    cmd = '%s/glimmer-mg%s' % (bin_dir, options.glim_suffix)
+    cmd = '%s/glimmer-mg%s -u %f' % (bin_dir, options.glim_suffix, options.fudge)
 
-    if options.indel or options.quality_file:
+    if options.indel:
         cmd += ' -i'
+    if options.circular:
+        cmd += ' -r'
+    if options.sub:
+        cmd += ' -s'
 
     return cmd
 
