@@ -28,7 +28,7 @@ def main():
     else:
         sequence_file = args[0]
 
-    if options.output_file:
+    if options.out:
         output_file = options.out
     else:
         output_file = os.path.splitext(sequence_file)[0]
