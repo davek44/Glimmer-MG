@@ -31,7 +31,7 @@ def main():
     if options.out:
         output_file = options.out
     else:
-        output_file = os.path.splitext(sequence_file)[0]
+        output_file = os.path.splitext(os.path.split(sequence_file)[-1])[0]
     
     # classify
     if not options.class_done and not options.raw_done:
