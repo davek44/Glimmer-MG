@@ -208,6 +208,10 @@ def predict_msa(preds, seq):
             else:
                 pred_msa[p] = 'C'
                 
+            f += 1
+            p += 1
+            s += 1
+                
         else:
             # normal
             pred_msa[p] = frag_msa[p]
