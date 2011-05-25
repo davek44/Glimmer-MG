@@ -90,6 +90,8 @@ def get_preds(seqs_file, genepred_file):
             deletions = []
             if len(a[6]) > 2:
                 deletions = [int(x)-1 for x in a[6][2:].split(',')]
+            if len(a[7]) > 2:
+                substitutions = [int(x)-1 for x in a[7][2:].split(',')]
 
             if int(a[3]) > 0:
                 # forward
@@ -124,7 +126,7 @@ def get_preds(seqs_file, genepred_file):
                 if end > frag_lengths[header]+indel_plusminus:
                     start_codon = False
 
-            frag_preds[header].append(Pred(start, end, strand, start_codon, stop_codon, insertions, deletions))
+            frag_preds[header].append(Pred(start, end, strand, start_codon, stop_codon, insertions, deletions, substitutions))
 
     for header in frag_preds:
         frag_preds[header].sort(gene_compare)
@@ -143,21 +145,26 @@ def predict_msa(preds, seq):
     # combine indels from genes
     insertions = []
     deletions = []
+    substitutions = []
     for p in preds:
         insertions += p.insertions
         deletions += p.deletions
+        substitutions += p.substitutions
     insertions.sort()
     deletions.sort()
+    substitutions.sort()
 
     del_len = len(deletions)
     ins_len = len(insertions)
+    sub_len = len(substitutions)
 
-    if del_len == ins_len == 0:
+    if del_len == ins_len == sub_len == 0:
         pred_msa = frag_msa
 
     else:
        i = 0 # index into insertions
        d = 0 # index into deletions
+       s = 0 # index into substitutions
        p = 3 # index into pred msa
        # m = 0 # index into frag msa (unadjusted)
        f = 0 # index into frag seq 
@@ -189,6 +196,17 @@ def predict_msa(preds, seq):
                 f += 1
             p += 1
 
+        elif s < sub_len and substitutions[s] == f:
+            # substitution (change stop codon)
+            if frag_msa[p] == '-':
+                print >> sys.stderr, 'Hit a gap where a substitution should be:'
+                print >> sys.stderr, seq
+                exit(1)
+            elif frag_msa[p] == 'C':                
+                pred_msa[p] = 'G'
+            else:
+                pred_msa[p] = 'C'
+                
         else:
             # normal
             pred_msa[p] = frag_msa[p]
@@ -346,7 +364,7 @@ def translate(dna):
 
 
 class Pred:
-    def __init__(self, start, end, strand, start_codon, stop_codon, insertions, deletions):
+    def __init__(self, start, end, strand, start_codon, stop_codon, insertions, deletions, substitutions):
         self.start = start
         self.end = end
         self.strand = strand
@@ -354,6 +372,7 @@ class Pred:
         self.stop_codon = stop_codon
         self.insertions = insertions
         self.deletions = deletions
+        self.substitutions = substitutions
 
     def __str__(self):
         return '\t'.join([str(x) for x in [self.start,self.end,self.strand,int(self.start_codon),int(self.stop_codon)]])
