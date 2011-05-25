@@ -90,6 +90,7 @@ def get_preds(seqs_file, genepred_file):
             deletions = []
             if len(a[6]) > 2:
                 deletions = [int(x)-1 for x in a[6][2:].split(',')]
+            substitutions = []
             if len(a[7]) > 2:
                 substitutions = [int(x)-1 for x in a[7][2:].split(',')]
 
