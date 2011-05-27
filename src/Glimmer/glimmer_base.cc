@@ -15,7 +15,7 @@
 
 #include  "glimmer_base.hh"
 
-bool Dave_Log = false;
+bool Dave_Log = true;
 bool Length_Log = false;
 bool Detail_Log = false;
 bool Sequence_Log = false;
@@ -491,7 +491,7 @@ void  Do_Fwd_Stop_Codon
 	  orf_len = i - prev_fwd_stop [frame] - 4;
      }
      
-     if  (gene_len >= Min_Gene_Len || (Allow_Indels && orf_len >= Min_Indel_ORF_Len))
+     if  (gene_len >= Min_Gene_Len || ((Allow_Indels || Allow_Subs) && orf_len >= Min_Indel_ORF_Len))
      {
 	  orf . Set_Stop_Position (i - 1);
 	  orf . Set_Frame (1 + (frame + 1) % 3);
@@ -525,7 +525,7 @@ void  Do_Rev_Stop_Codon
 
      orf_len = i - orf_stop - 4;
 		    
-     if  (gene_len >= Min_Gene_Len || (Allow_Indels && orf_len >= Min_Indel_ORF_Len))
+     if  (gene_len >= Min_Gene_Len || ((Allow_Indels || Allow_Subs) && orf_len >= Min_Indel_ORF_Len))
      {
 	  orf . Set_Stop_Position (orf_stop);
 	  orf . Set_Frame (-1 - (frame + 1) % 3);
@@ -803,7 +803,7 @@ void  Finish_Orfs
 	  Handle_Last_Reverse_Stop (frame, prev_rev_stop, last_rev_start,
 				    gene_len, orf_len, orf_stop, use_wraparound, last_position);
 	       
-	  if  (gene_len >= Min_Gene_Len || (Allow_Indels && orf_len >= Min_Indel_ORF_Len))
+	  if  (gene_len >= Min_Gene_Len || ((Allow_Indels || Allow_Subs) && orf_len >= Min_Indel_ORF_Len))
 	  {
 	       orf . Set_Stop_Position (orf_stop);
 	       orf . Set_Frame (-1 - (frame + 1) % 3);

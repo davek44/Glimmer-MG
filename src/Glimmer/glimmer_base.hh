@@ -171,6 +171,7 @@ extern bool  Use_First_Start_Codon;
 extern bool  Use_Independent_Score;
 
 extern bool Allow_Indels;
+extern bool Allow_Subs;
 extern int Dist_Max_Overlap;
 extern double Event_Threshold;
 extern char * Feature_File;
