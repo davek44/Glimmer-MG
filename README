@@ -1,0 +1,34 @@
+Glimmer-MG is a system for finding genes in environmental shotgun DNA
+sequences. Glimmer-MG (Gene Locator and Interpolated Markov ModelER -
+MetaGenomics) uses interpolated Markov models (IMMs) to identify the
+coding regions and distinguish them from noncoding DNA. The IMM
+approach, described in our Nucleic Acids Research paper on Glimmer 1.0
+and in our subsequent paper on Glimmer 2.0 , uses a combination of
+Markov models from 1st through 8th-order, weighting each model
+according to its predictive power. Glimmer uses 3-periodic
+nonhomogenous Markov models in its IMMs.
+
+Glimmer-MG addresses the challenges of metagenomics gene
+prediction. Prediction model training is the main reason Glimmer3
+cannot be applied to metagenomics sequences. Rather than rely on GC%
+to find evolutionary relative genomes for training, Glimmer-MG instead
+finds phylogenetic classifications using Phymm and parameterizes gene
+prediction models using those classifications. Glimmer-MG also
+clusters the sequences using Scimm, which groups together sequences
+that are likely from the same organism. Analogous to iterative schemes
+that are useful for whole genomes, Glimmer-MG retrains prediction
+models within each cluster on the initial gene predictions before
+making a final set of predictions. To account for fragmented genes,
+Glimmer-MG incorporates a model for gene length, in which partial
+genes are carefully handled. Finally, Glimmer-MG can predict
+insertions and deletions in the sequence by branching into a different
+frame at low quality base calls such as homopolymer runs in 454
+sequences.
+
+Reference:
+Kelley DR, Liu B, Delcher A, Pop M, Salzberg S. Gene
+prediction with Glimmer on metagenomic sequences augmented by
+phylogenetic classification and clustering. (submitted)
+
+Website:
+http://www.cbcb.umd.edu/software/glimmer-mg
