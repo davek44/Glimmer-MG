@@ -1,4 +1,4 @@
-#!/bin/awk -f
+#!/usr/bin/awk -f
 # Usage:  get-motif-counts.awk
 #   Read output of  elph  program and extract the motif
 #   count information.  Output it in a format suitable for

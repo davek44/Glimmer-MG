@@ -92,6 +92,18 @@ The \Gmg{} pipeline can be run a number of different ways, including a
 Python script to run the full pipeline and options to classify/cluster
 the reads separately and predict genes using those results.
 
+% Running on a single genome
+\subsubsection{Running on a single genome}
+The Python script \,\Pg{g3-iterated.py}\, runs the unsupervised single
+genome pipeline.
+\BSV
+\begin{verbatim}
+g3-iterated.py genome.fasta out
+\end{verbatim}
+\ESV
+This script will extract initial ORFs for training using the \,\Pg{long-orfs}\,
+program and then run multiple iterations of Glimmer and retraining.
+
 % Running everything
 \subsubsection{Running from scratch}
 The Python script \,\Pg{glimmer-mg.py}\, runs the full \Gmg{}
@@ -177,41 +189,40 @@ glimmer-mg.py --sub illumina.fasta
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sample Run Directory}
+The directory \,\Pg{sample\_run}\, contains a sample run of \Gmg{}.
 
-A directory containing a sample run of \Gthree{} is provided.
-This directory, named \,\Pg{sample\_run}\, contains the genome sequence
-for \emph{Treponema pallidum} (file \,\Pg{tpall.fna}\,)
-and a list of annotated genes for it (file \,\Pg{tpall.nh}\,),
-both downloaded from GenBank.
-The files whose names begin \,\Pg{from-scratch}\, are the result of
-running the script
+\subsection{Single Genome}
+The subdirectory \,\Pg{glimmer3}\, contains the genome sequence of
+a Helicobacter Pylori strain. The files in the directory \,\Pg{results}\, are the
+result of running the script
 \BSV
 \begin{verbatim}
-  g3-from-scratch.csh tpall.fna from-scratch
+  g3-iterated.py NC_000915.fna NC_000915
 \end{verbatim}
 \ESV
-The files whose names begin \,\Pg{from-training}\, are the result of
-running the script
+
+\subsection{Metagenomics}
+The subdirectory \,\Pg{glimmer-mg}\, contains a simulated metagenome
+in the fasta file \,\Pg{seqs.fa}\, with the sequence origins in
+\,\Pg{map.txt}\,. The files in the directory \,\Pg{results}\, are the
+result of running the script
 \BSV
 \begin{verbatim}
-  g3-from-training.csh tpall.fna tpall.nh from-training
+  glimmer-mg.py seqs.fa
 \end{verbatim}
 \ESV
-The files whose names begin \,\Pg{iterated}\, are the result of
-running the script
-\BSV
-\begin{verbatim}
-  g3-iterated.csh tpall.fna iterated
-\end{verbatim}
-\ESV
-Users will need to modify the path directories at the top of these
-scripts to be able to run them (see Section~\ref{script:sec} above).
+
+Don't be alarmed if your results are slightly different. One
+explanation is that a slightly different set of GenBank reference
+genomes were available to \Phymm. Another explanation is that \Scimm{}
+has a stochastic component and may have produced a different set of
+clusters used for retraining.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Notes on \Gmg{} programs}
-\subsection{\Pg{glimmer-mg} Program}
+\subsection{\Pg{glimmer-mg}}
 
-This is the main program that makes gene preditions.
+This is the main program that makes gene predictions.
 
 \subsubsection{\Pg{glimmer-mg} Parameters \& Options}
 The invocation for \,\Pg{glimmer-mg}\, is:
@@ -363,7 +374,7 @@ read2     Rhodopseudomonas_palustris_BisA53|NC_008435 Rhodopseudomonas_palustris
 \el
 
 
-\subsubsection{\Gmg{} Output Formats}
+\subsubsection{\Pg{glimmer-mg} Output Formats}
 
 \smallskip
 \noindent\textbf{\Pg{.predict} File}
@@ -398,6 +409,206 @@ The columns are:
 \item[Column 5]
   The log-likelihood ratio score of the gene.
 \el
+
+\subsection{\Pg{extract\_aa.py}}
+\,\Pg{extract\_aa.py}\, can be used to extract a multi-fasta file of
+amino acid sequences from the gene predictions made by
+\,\Pg{Glimmer}\,.
+
+\subsubsection{\Pg{extract\_aa.py} Parameters \& Options}
+
+The invocation for \,\Pg{extract\_aa.py}\, is:
+\bq
+  \Pg{extract\_aa.py}\, [\Desc{options}]
+\eq
+
+\Desc{options} can be the following:
+\bl{}\RaggedRight
+
+\exdent
+  \verb`-s` \Desc{filename}
+
+  \Desc{filename} specifies the fasta file of sequences on which
+  gene predictions were made.
+
+\exdent
+  \verb`-p` \Desc{filename}
+
+  \Desc{filename} specifies the Glimmer output .predict file
+  containing gene predictions.
+
+\exdent
+  \verb`-o` \Desc{filename}
+
+  \Desc{filename} specifies the output file in which to print
+  amino acid sequences in fasta format.
+
+\el
+
+\subsection{\Pg{informative\_genomes.py}}
+
+Make a list of the GenBank reference genomes which have sufficient
+non-hypothetical gene annotations to be useful for training. Only
+Phymm classifications to these genomes will be used for training.
+
+\subsection{\Pg{train\_features.py}}
+
+Generate data files to be directly used for gene prediction training.
+
+\subsubsection{\Pg{train\_features.py} Parameters \& Options}
+
+The invocation for \,\Pg{train\_features.py}\, is:
+\bq
+  \Pg{train\_features.py}\, [\Desc{options}]
+\eq
+
+\Desc{options} can be the following:
+\bl{}\RaggedRight
+
+\exdent
+  \verb`-f`
+
+  Print a ``feature'' file as expected by the \verb`-f` option of the
+  \Pg{glimmer-mg}
+
+\exdent
+  \verb`--gbk` \Desc{filename}
+
+  \Desc{filename} specifies the GenBank RefSeq annotation file from
+  which to generate data files. Either this option or the combination
+  of \verb`--predict` and \verb`--seq` must be specified.
+
+\exdent
+  \verb`--icm`
+
+  Only produce the gene composition ICM model.
+
+\exdent
+  \verb`--indels`
+
+  Note that the gene predictions may contain indels, which must be
+  carefully considered when processing the predictions.
+
+\exdent
+  \verb`-l` \Desc{n}
+
+  \Desc{n} specifies the minimum length of an ORF to be considered
+  as a gene.
+
+\exdent
+  \verb`--predict` \Desc{filename}
+
+  \Desc{filename} specifies \,\Pg{Glimmer}\, gene prediction output to
+  be used for training. \verb`--seq` must also be specified. Either
+  this option or \verb`--gbk` must be specified.
+
+\exdent
+  \verb`-o` \Desc{n} \enskip or \enskip \verb`--max_overlap` \Desc{n}
+
+\exdent
+  \verb`--rbs`
+
+  Only produce the ribosomal binding site motif model.
+
+\exdent
+  \verb`--seq` \Desc{filename}
+
+\exdent
+  \verb`-z`
+
+\el
+
+\subsubsection{\Pg{train\_features.py} Output Formats}
+
+\smallskip
+\noindent\textbf{\Pg{.gicm} File}
+\smallskip
+
+Interpolated context model (ICM) trained on coding sequence from the
+genome given.
+
+\smallskip
+\noindent\textbf{\Pg{.gc.txt} File}
+\smallskip
+
+GC\% of the genome given.
+
+\smallskip
+\noindent\textbf{\Pg{.lengths.<genes/non>.txt} File}
+\smallskip
+
+Counts of gene or noncoding ORF lengths from the genome given.
+
+\smallskip
+\noindent\textbf{\Pg{.starts.<genes/non>.txt} File}
+\smallskip
+
+Counts of start codon usage for the genes and noncoding ORFs
+from the genome given.
+
+\smallskip
+\noindent\textbf{\Pg{.motif} File}
+\smallskip
+
+Ribosomal binding site (RBS) position weight matrix motif model
+as generated by ELPH from the promoters of genes in the genome
+given.
+
+\smallskip
+\noindent\textbf{\Pg{.adj\_orients.<genes/non>.txt} File}
+\smallskip
+
+Counts of gene or noncoding adjacent gene orientations. $1$ specifies
+an ORF in the forward direction, and $-1$ specifies an ORF in the
+revere direction. Thus, $1,-1$ specifies the number of times a forward
+gene is followed by a reverse gene.
+
+\smallskip
+\noindent\textbf{\Pg{.adj\_dist.<1/-1>.<1/-1>.<genes/non>.txt} File}
+\smallskip
+
+Counts of distances between adjacent genes or noncoding ORFs. $1$
+specifies an ORF in the forward direction, and $-1$ specifies an ORF
+in the revere direction. Thus, $1.-1$ specifies the distance counts
+when a forward gene is followed by a reverse gene. In the noncoding
+case, the distance counts refer to each pair of a noncoding ORF and
+the genes adjacent to it.
+
+\subsection{\Pg{train\_all.py}}
+
+Run \Pg{train\_features.py} on all GenBank reference genomes in
+Phymm's database.
+
+\subsubsection{\Pg{train\_all.py} Parameters \& Options}
+
+The invocation for \,\Pg{train\_all.py}\, is:
+\bq
+  \Pg{train\_all.py}\, [\Desc{options}]
+\eq
+
+\Desc{options} can be the following:
+\bl{}\RaggedRight
+
+\exdent
+  \verb`-p` \Desc{n}
+
+  Spread the processes launched over \Desc{n} processes.
+
+\exdent
+  \verb`-u`
+
+  Only train on GenBank reference genomes for which no data files
+  have yet been produced.
+
+\el
+
+\subsection{\Pg{double\_icms.py}}
+
+Generate ICMs trained on pairs of GenBank reference genome
+annotations. Only pairs of reference genomes with siimilar composition
+are generated. The similarity function is defined in the \Gmg{}
+manuscript.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
