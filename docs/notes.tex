@@ -92,6 +92,18 @@ The \Gmg{} pipeline can be run a number of different ways, including a
 Python script to run the full pipeline and options to classify/cluster
 the reads separately and predict genes using those results.
 
+% Running on a single genome
+\subsubsection{Running on a single genome}
+The Python script \,\Pg{g3-iterated.py}\, runs the unsupervised single
+genome pipeline.
+\BSV
+\begin{verbatim}
+g3-iterated.py genome.fasta out
+\end{verbatim}
+\ESV
+This script will extract initial ORFs for training using the \,\Pg{long-orfs}\,
+program and then run multiple iterations of Glimmer and retraining.
+
 % Running everything
 \subsubsection{Running from scratch}
 The Python script \,\Pg{glimmer-mg.py}\, runs the full \Gmg{}
@@ -177,14 +189,23 @@ glimmer-mg.py --sub illumina.fasta
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Sample Run Directory}
+The directory \,\Pg{sample\_run}\, contains a sample run of \Gmg{}.
 
-A directory containing a sample run of \Gmg{} is provided.  This
-directory, named \,\Pg{sample\_run}\, contains a simualted metagenome
+\subsection{Single Genome}
+The subdirectory \,\Pg{glimmer3}\, contains the genome sequence of
+a Helicobacter Pylori strain. The files in the directory \,\Pg{results}\, are the
+result of running the script
+\BSV
+\begin{verbatim}
+  g3-iterated.py NC_000915.fna NC_000915
+\end{verbatim}
+\ESV
+
+\subsection{Metagenomics}
+The subdirectory \,\Pg{glimmer-mg}\, contains a simulated metagenome
 in the fasta file \,\Pg{seqs.fa}\, with the sequence origins in
-\,\Pg{map.txt}\,.
-
-The files in the directory \,\Pg{results}\, are the result of
-running the script
+\,\Pg{map.txt}\,. The files in the directory \,\Pg{results}\, are the
+result of running the script
 \BSV
 \begin{verbatim}
   glimmer-mg.py seqs.fa
@@ -193,7 +214,9 @@ running the script
 
 Don't be alarmed if your results are slightly different. One
 explanation is that a slightly different set of GenBank reference
-genomes were available to \Phymm. Another explanation is that \Scimm
+genomes were available to \Phymm. Another explanation is that \Scimm{}
+has a stochastic component and may have produced a different set of
+clusters used for retraining.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Notes on \Gmg{} programs}

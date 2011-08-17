@@ -758,8 +758,8 @@ static void  Parse_Command_Line
         {"rbs_pwm", 1, 0, 'b'},
         {"gc_percent", 1, 0, 'C'},
         {"entropy", 1, 0, 'E'},
-        {"first_codon", 0, 0, 'f'},
-	{"features", 1, 0, 'F'},
+        {"first_codon", 0, 0, 'F'},
+	{"features", 1, 0, 'f'},
         {"gene_len", 1, 0, 'g'},
         {"help", 0, 0, 'h'},
         {"ignore", 1, 0, 'g'},
@@ -780,11 +780,11 @@ static void  Parse_Command_Line
       };
 
    while  (! errflg && ((ch = getopt_long (argc, argv,
-        "A:b:C:E:fF:g:hi:lL:m:Mno:P:q:t:u:Xz:Z:",
+        "A:b:C:E:f:Fg:hi:lL:m:Mno:P:q:t:u:Xz:Z:",
         long_options, & option_index)) != EOF))
 #else
    while  (! errflg && ((ch = getopt (argc, argv,
-        "A:b:C:E:fF:g:hi:lL:m:Mno:P:q:t:u:Xz:Z:")) != EOF))
+        "A:b:C:E:f:Fg:hi:lL:m:Mno:P:q:t:u:Xz:Z:")) != EOF))
 #endif
 
      switch  (ch)
@@ -834,11 +834,11 @@ static void  Parse_Command_Line
               Read_Entropy_Profiles (optarg, errflg);
           Use_Entropy_Profiles = true;
           break;
-
-        case  'f' :
-          Command_Line . append (" -f");
-          Use_First_Start_Codon = true;
-          break;
+	  
+       case  'f' :
+	 Command_Line . append (" -f");
+	 Use_First_Start_Codon = true;
+	 break;
 
        case 'F' :
 	    Command_Line.append(" -F");
@@ -1795,9 +1795,13 @@ static void  Usage
        "    line, then 20 lines of 3 columns each.  Columns are amino acid,\n"
        "    positive entropy, negative entropy.  Rows must be in order\n"
        "    by amino acid code letter\n"
-       " -f\n"
+       " -F\n"
        " --first_codon\n"
        "    Use first codon in orf as start codon\n"
+       " -f <filename>\n"
+       " --features <filename>\n"
+       "    Read feature counts for a specific organism from <filename>.\n"
+       "    See manual for more information.\n"
        " -g <n>\n"
        " --gene_len <n>\n"
        "    Set minimum gene length to <n>\n"
@@ -1819,6 +1823,9 @@ static void  Usage
        " --separate_genes\n"
        "    <sequence-file> is a multifasta file of separate genes to\n"
        "    be scored separately, with no overlap rules\n"
+       " -m <filename>\n"
+       " --icm <filename>\n"
+       "    Read ICM from <filename> and use to score ORF coding likelihood\n"
        " -o <n>\n"
        " --max_olap <n>\n"
        "    Set maximum overlap length to <n>.  Overlaps this short or shorter\n"
@@ -1833,14 +1840,14 @@ static void  Usage
        " --ignore_score_len <n>\n"
        "    Do not use the initial score filter on any gene <n> or more\n"
        "    base long\n"
-       " -r\n"
-       " --no_indep\n"
-       "    Don't use independent probability score column\n"
        " -t <n>\n"
        " --threshold <n>\n"
        "    Set threshold score for calling as gene to n.  If the in-frame\n"
        "    score >= <n>, then the region is given a number and considered\n"
        "    a potential gene.\n"
+       " -u\n"
+       " --fudge\n"
+       "    Value to be added to the log-likelihood ratio score of every ORF.\n"
        " -X\n"
        " --extend\n"
        "    Allow orfs extending off ends of sequence to be scored\n"
