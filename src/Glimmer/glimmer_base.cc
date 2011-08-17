@@ -15,7 +15,7 @@
 
 #include  "glimmer_base.hh"
 
-bool Dave_Log = true;
+bool Dave_Log = false;
 bool Length_Log = false;
 bool Detail_Log = false;
 bool Sequence_Log = false;
