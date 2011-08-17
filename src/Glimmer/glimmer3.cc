@@ -124,6 +124,7 @@ bool  Use_First_Start_Codon = DEFAULT_USE_FIRST_START_CODON;
   // otherwise, try to choose the best start codon
 
 bool Allow_Indels = false;
+bool Allow_Subs = false;
   // Artifact of Glimmer-MG
 int Dist_Max_Overlap = -1;
   // Overlaps of this many or fewer bases are allowed between adjacent

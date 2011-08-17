@@ -99,6 +99,8 @@ string  Tag;
 ////////////////////////////////////////////
 bool Allow_Indels = false;
   // Allow Glimmer to shift the frame of a gene at low quality bases
+bool Allow_Subs = false;
+  // Allow Glimmer to pass through (error-predicted) stop codons
 int Dist_Max_Overlap = -1;
   // Overlaps of this many or fewer bases are allowed between adjacent
   // genes (as defined by the adjacent distance distributions
@@ -131,8 +133,6 @@ static char * Quality_File_Name = NULL;
   // Quality value file name
 static double Indel_Suffix_Score_Threshold = -12;
   // Minimum score for an ORF to consider allowing indels
-static bool Allow_Subs = false;
-  // Allow Glimmer to pass through (error-predicted) stop codons
 static int Indel_Quality_Threshold = 18;
   // Threshold for a base's quality value to allow an indel
 static int Indel_Max = 2;
@@ -849,9 +849,8 @@ static void  Parse_Command_Line
           break;
 
        case 'q' :
-	    Command_Line . append (" -Q ");
+	    Command_Line . append (" -q ");
 	    Command_Line . append (optarg);
-	    Allow_Indels = true;
 	    Quality_File_Name = optarg;
 	    break;
 
@@ -862,7 +861,7 @@ static void  Parse_Command_Line
 	    break;
 
        case 's' :
-	    Command_Line . append (" -S");
+	    Command_Line . append (" -s");
 	    Allow_Subs = true;
 	    break;
 
@@ -1712,7 +1711,7 @@ static void Score_Orf_Starts(Orf_t & orf, vector<Start_t> & start_list, int end_
 	  if(len >= 0)
 	  {
 	       Reverse_Transfer (seq_buff, Sequence, hi-1, len);
-	       if(Allow_Indels)
+	       if(Allow_Indels || Quality_File_Name != NULL)
 		    Reverse_Transfer_Qual (qual_buff, hi-1, len);
 	  }
 	  orf_is_truncated = (lo < 3 && Allow_Truncated_Orfs);
@@ -1732,7 +1731,7 @@ static void Score_Orf_Starts(Orf_t & orf, vector<Start_t> & start_list, int end_
 	  if(lo-1 < Sequence_Len)
 	  {
 	       Complement_Transfer (seq_buff, Sequence, lo-1, len);
-	       if(Allow_Indels)
+	       if(Allow_Indels || Quality_File_Name != NULL)
 		    Complement_Transfer_Qual (qual_buff, lo-1, len);
 	  }
 	  orf_is_truncated = (Sequence_Len - (hi-1) < 3 && Allow_Truncated_Orfs);
@@ -1755,10 +1754,12 @@ static void Score_Orf_Starts(Orf_t & orf, vector<Start_t> & start_list, int end_
 	  // set end_point and error point
 	  if(frame > 0) {
 	       error_end_point = lo - 3;
-	       error_pos = lo - 3;
+	       //error_pos = lo - 3;
+	       error_pos = lo - 2;
 	  } else {
 	       error_end_point = hi + 3;
-	       error_pos = hi + 1;
+	       //error_pos = hi + 1;
+	       error_pos = hi + 2;
 	  }
 
 	  // BE VERY CAREFUL HERE BECAUSE IT WILL AFFECT WHETHER WE MUTATE TO GET TO THE END OF THE GENE OR NOT

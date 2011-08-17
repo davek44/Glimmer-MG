@@ -61,7 +61,7 @@ def main():
         combine_imm(seqsf, pids, origdir)
 
         # clean up intermediate files
-        clean(seqsf, pids)
+        #clean(seqsf, pids)
 
     else:
         # if blast, sequence-based parallelization

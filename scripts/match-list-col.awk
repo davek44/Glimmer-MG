@@ -1,4 +1,4 @@
-#!/usr/bin/awk -f
+#!/bin/awk -f
 # Usage:  match-list-col.awk  <list-file>  <col>
 #   Print lines from stdin whose entry in column <col> is one of the entries
 #   occurring in <list-file>.
