@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from optparse import OptionParser, OptionGroup, SUPPRESS_HELP
-import os, sys, pdb, subprocess, glob, gzip
+import os, sys, pdb, subprocess, glob, gzip, time
 
 ################################################################################
 # glimmer-mg.py
@@ -18,6 +18,8 @@ physcimm_bin = os.path.abspath('%s/../scimm/bin/physcimm.py' % scripts_dir)
 # main
 ################################################################################
 def main():
+    overall_start_time = time.time()
+
     usage = 'usage: %prog [options] <fasta file>'
     parser = OptionParser(usage)
     add_options(parser)
@@ -35,8 +37,13 @@ def main():
     
     # classify
     if not options.class_done and not options.raw_done:
-        p = subprocess.Popen('%s/phymm_par.py -b -p %d %s' % (scripts_dir, options.proc, sequence_file), shell=True)
+        start_time = time.time()
+        p = subprocess.Popen('%s/phymm_par.py -b -p %d %s' % (scripts_dir, options.proc, sequence_file), shell=True)        
         os.waitpid(p.pid, 0)
+        if options.time:
+            f = open('time_%s_phymm.txt' % output_file, 'w')
+            print >> f, '%.3fs' % (time.time()-start_time)
+            f.close()
 
     # parse classifications
     class_file = '%s.class.txt' % output_file
@@ -73,20 +80,30 @@ def main():
 
     # single iterations
     if options.iterate == 0:
+        start_time = time.time()
         if options.long_orfs:
             p = subprocess.Popen('%s -m %s.icm -c %s %s %s %s' % (g3_cmd, output_file, class_file, qual_str, sequence_file, output_file), shell=True)
         else:
             p = subprocess.Popen('%s -c %s %s %s %s' % (g3_cmd, class_file, qual_str, sequence_file, output_file), shell=True)
-        os.waitpid(p.pid, 0)    
+        os.waitpid(p.pid, 0)
+        if options.time:
+            f = open('time_%s_iter0.txt' % output_file, 'w')
+            print >> f, '%.3fs' % (time.time()-start_time)
+            f.close()
 
     # multiple iterations
     else:
         # make initial predictions using classifications only
+        start_time = time.time()
         if options.long_orfs:
             p = subprocess.Popen('%s -m %s.run1.icm -c %s %s %s %s.run1' % (g3_cmd, output_file, class_file, qual_str, sequence_file, output_file), shell=True)
         else:
             p = subprocess.Popen('%s -c %s %s %s %s.run1' % (g3_cmd, class_file, qual_str, sequence_file, output_file), shell=True)
         os.waitpid(p.pid, 0)
+        if options.time:
+            f = open('time_%s_iter0.txt' % output_file, 'w')
+            print >> f, '%.3fs' % (time.time()-start_time)
+            f.close()
 
         # no clustering
         if options.single_cluster:
@@ -112,6 +129,11 @@ def main():
                 cluster_clean(clust_sequence_file, output_file)
             predict_out.close()
 
+    if options.time:
+       f = open('time_%s.txt' % output_file, 'w')
+       print >> f, '%.3fs' % (time.time()-overall_start_time)
+       f.close() 
+
 
 ################################################################################
 # add_options
@@ -129,12 +151,14 @@ def add_options(parser):
 
     # in iterative re-training, Glimmer score threshold
     parser.add_option('--filter', dest='filter_t', type='float', default=1.0, help=SUPPRESS_HELP)
-    # add a suffix to the glimmer binary in order to run a different version
-    parser.add_option('--glim_suffix', dest='glim_suffix', default='', help=SUPPRESS_HELP)
+    # change the glimmer binary in order to run a different version
+    parser.add_option('--glim_bin', dest='glim_bin', default='%s/glimmer-mg'%bin_dir, help=SUPPRESS_HELP)
     # find the map.txt file and ignore each sequence's source ICM score
     parser.add_option('--ignore', dest='ignore', default=False, action='store_true', help=SUPPRESS_HELP)
     # retrain all features include length and adjacency models
     parser.add_option('--all_features', dest='all_features', default=False, action='store_true', help=SUPPRESS_HELP)
+    # time each successive step of the program
+    parser.add_option('--time', dest='time', default=False, action='store_true', help=SUPPRESS_HELP)
 
     ############################################
     # glimmer-mg options
@@ -424,7 +448,7 @@ def get_transl_table(sequence_file, output_file):
 # Determine Glimmer options
 ################################################################################
 def glimmer_options(options):
-    cmd = '%s/glimmer-mg%s -u %f' % (bin_dir, options.glim_suffix, options.fudge)
+    cmd = '%s -u %f' % (options.glim_bin, options.fudge)
 
     if options.indel:
         cmd += ' -i'
