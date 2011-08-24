@@ -214,7 +214,7 @@ int  main
 
 {
      FILE  * sequence_fp, * quality_fp, * detail_fp, * predict_fp;
-     vector <string>  seq_list, hdr_list;
+     vector <string>  seq_list, hdr_list, pre_list;
      vector < vector<int> > qual_list;
      vector <Orf_t>  orf_list;
      vector <Gene_t>  gene_list;
@@ -318,6 +318,7 @@ int  main
 	  bool end_of_reads = false;
 	  while (!end_of_reads)
 	  {
+	       
 	       // read in chunk of sequences
 	       for(chunk_i = 0; !end_of_reads && chunk_i < Chunk_Sequences; chunk_i++)
 	       {
@@ -326,12 +327,15 @@ int  main
 		    {
 			 seq_list.push_back("");
 			 hdr_list.push_back("");
+			 pre_list.push_back("");
 			 vector<int> q;
 			 qual_list.push_back(q);
 		    }
 
 		    if(!Fasta_Read(sequence_fp, seq_list[chunk_i], hdr_list[chunk_i]))
 			 end_of_reads = true;
+		    else
+			 pre_list[chunk_i] = split(hdr_list[chunk_i])[0];
 		    if(Quality_File_Name != NULL)
 			 Fasta_Qual_Vec_Read(quality_fp, qual_list[chunk_i], header);
 	       }
@@ -347,11 +351,10 @@ int  main
 		    for(i = 0; i < chunk_i; i++)
 		    {
 			 Fasta_Header = hdr_list[i].c_str();
-			 header_prefix = split(string(Fasta_Header))[0];
 
 			 // does this sequence match this ICM
 			 if(!User_ICM)
-			      seq_set_it = icm_map_it->second.find(header_prefix);
+			      seq_set_it = icm_map_it->second.find(pre_list[i]);
 
 			 if(User_ICM || seq_set_it != icm_map_it->second.end())
 			 {
