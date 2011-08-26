@@ -25,6 +25,8 @@ insertions and deletions in the sequence by branching into a different
 frame at low quality base calls such as homopolymer runs in 454
 sequences.
 
+See manual.pdf for instructions on installation and running Glimmer-MG.
+
 Reference:
 Kelley DR, Liu B, Delcher A, Pop M, Salzberg S. Gene
 prediction with Glimmer on metagenomic sequences augmented by

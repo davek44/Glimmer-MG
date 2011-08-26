@@ -65,19 +65,53 @@ from the website.  Then uncompress the file by typing
   tar xzf glimmer-mg.1.0.1.tar.gz
 \end{verbatim}
 \ESV
+
 A directory named \,\verb`glimmer-mg`\, should result.
-In that directory, is a subdirectory named \,\verb`src`\,.
-Within the \,\verb`src`\, subdirectory type
-\BSV
-\begin{verbatim}
-  make
-\end{verbatim}
-\ESV
-(or alternately \Pg{gmake}).
-This will compile the \Gmg{} programs
-and put the executable files in the directory
-\,\verb`glimmer-mg/bin`\,.  These files can be copied or moved to
-whatever directory is convenient to the user.
+In that directory is a script called \,\verb`install_glimmer.py`\,
+which will download and install the prerequisite software and
+compile the \Gmg{} code. More specifically, it will
+\begin{enumerate}\RaggedRight
+
+\item Download, compile, and install \,\verb`Phymm`\,
+
+  \,\verb`Phymm`\, is used to compute the phylogenetic classifications
+  of sequences used by \Gmg{} to parameterize gene prediction models.
+  \,\verb`Phymm`\, will install a database of interpolated Markov
+  models (IMMs) to be used for classification that requires $\sim50$
+  Gb of disk space and takes about $\sim24$ hours to build. If you
+  already have \,\verb`Phymm`\, installed, you need only set the
+  variable \Desc{prior\_phymm\_dir} in \,\verb`install_glimmer.py`\, to
+  its installation directory.
+
+\item Download, compile, and install \,\verb`Scimm`\,
+
+  \,\verb`Scimm`\, is used to cluster the sequences to enable an
+  unsupervised retraining step followed by a second iteration of
+  gene predictions.
+
+\item Download, compile, and install \,\verb`ELPH`\,
+
+  \,\verb`ELPH`\, is used to compute a motif position weight matrix
+  for the ribosomal binding sites in the promoters of the training
+  gene sets.
+
+\item Compile and install \Gmg{}
+
+  This will compile the main gene prediction code.
+
+\item Prepare \Gmg{} training data
+
+  There are three steps here. First, the script
+  \,\verb`train_all.py`\, will train the models for all features on
+  every reference genome in the \,\verb`Phymm`\, database. Second, the
+  script \,\verb`informative_genomes.py`\, will decide which reference
+  genomes will be useful for gene prediction and which (like small
+  plasmids) will not be useful. Finally, the script
+  \,\verb`double_icms.py`\, will determine which ICMs trained on two
+  reference genomes are worth building and build them. These steps
+  require some time.
+
+\end{enumerate}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Running \Gmg{}}
