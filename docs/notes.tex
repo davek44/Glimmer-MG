@@ -427,8 +427,7 @@ orf00057      532      450  -3     3.86 I: D:507 S:
 The columns are:
 \bl{\settowidth{\labelwidth}{Column 1}\leftmargin=\labelwidth \addtolength{\leftmargin}{1em}\labelsep=1em}\RaggedRight
 \item[Column 1]
-  The identifier of the predicted gene.  The numeric portion matches the
-  number in the \Pg{ID} column of the \Pg{.detail} file.
+  The identifier of the predicted gene.
 
 \item[Column 2]
   The start position of the gene.
@@ -442,6 +441,9 @@ The columns are:
 
 \item[Column 5]
   The log-likelihood ratio score of the gene.
+
+\item[Column 6]
+  The positions of insertion, deletion, and substition predictions within the ORF.
 \el
 
 \subsection{\Pg{extract\_aa.py}}
