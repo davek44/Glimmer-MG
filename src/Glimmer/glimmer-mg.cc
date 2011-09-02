@@ -203,11 +203,18 @@ typedef HASHMAP::hash_map< string, int > transl_hash;
 static transl_hash Sequence_Transl;
   // GenBank trans_table code corresponding to classifications of sequences
 
+/*
 typedef HASHMAP::hash_set< string > seq_set;
 typedef HASHMAP::hash_map< string, seq_set > icm_set_hash;
 static icm_set_hash ICM_Sequences;
+*/
+typedef HASHMAP::hash_map< string, vector<string> > icm_reads_hash;
+static icm_reads_hash ICM_Sequences;
   // Maps ICM names to sets of reads that will use them
 
+typedef HASHMAP::hash_map< string, int > read_i_hash;
+static read_i_hash Read_Indexes;
+  // Maps a read header to its index in the current chunk
 
 int  main
 (int argc, char * argv [])
@@ -220,9 +227,10 @@ int  main
      vector <Gene_t>  gene_list;
      string  hdr, filename;
      time_t  now;
-     int  i, chunk_i;
-     icm_set_hash::const_iterator icm_map_it;
-     seq_set::const_iterator seq_set_it;
+     int  i, chunk_i, r;
+     icm_reads_hash::const_iterator icm_map_it;
+     //seq_set::const_iterator seq_set_it;
+     read_i_hash::const_iterator read_map_it;
      string header, header_prefix;
      int seqs_analyzed = 0;     
 
@@ -283,7 +291,7 @@ int  main
 	       //Gene_ICM . Read (ICM_File_Name);
 
 	       // set up empty hash map to read it
-	       seq_set dummy;
+	       vector<string> dummy;
 	       ICM_Sequences[string(ICM_File_Name)] = dummy;
 
 	  } else if(!classifications.empty()) {
@@ -318,7 +326,8 @@ int  main
 	  bool end_of_reads = false;
 	  while (!end_of_reads)
 	  {
-	       
+	       Read_Indexes.clear();
+
 	       // read in chunk of sequences
 	       for(chunk_i = 0; !end_of_reads && chunk_i < Chunk_Sequences; chunk_i++)
 	       {
@@ -334,8 +343,10 @@ int  main
 
 		    if(!Fasta_Read(sequence_fp, seq_list[chunk_i], hdr_list[chunk_i]))
 			 end_of_reads = true;
-		    else
+		    else {
 			 pre_list[chunk_i] = split(hdr_list[chunk_i])[0];
+			 Read_Indexes[pre_list[chunk_i]] = chunk_i;
+		    }
 		    if(Quality_File_Name != NULL)
 			 Fasta_Qual_Vec_Read(quality_fp, qual_list[chunk_i], header);
 	       }
@@ -348,16 +359,18 @@ int  main
 		    // read it here meta or not
 		    Gene_ICM.Read((char*)icm_map_it->first.c_str());
 
-		    for(i = 0; i < chunk_i; i++)
+		    // for each read in the ICM's vector
+		    for(r = 0; r < icm_map_it->second.size(); r++)
 		    {
-			 Fasta_Header = hdr_list[i].c_str();
-
-			 // does this sequence match this ICM
-			 if(!User_ICM)
-			      seq_set_it = icm_map_it->second.find(pre_list[i]);
-
-			 if(User_ICM || seq_set_it != icm_map_it->second.end())
+			 // check the chunk for the read
+			 read_map_it = Read_Indexes.find(icm_map_it->second[r]);
+			 if(read_map_it != Read_Indexes.end())
 			 {
+			      // if found, grab the index
+			      i = read_map_it->second;
+			      
+			      Fasta_Header = hdr_list[i].c_str();
+
 			      // prepare sequence
 			      Sequence = seq_list[i];
 			      Sequence_Len = Sequence . length ();
@@ -986,7 +999,7 @@ static void Read_Meta_ICMs()
 {
      string seq_header, icm_file;
      vector<string> seq_classes;
-     icm_set_hash::iterator isi;
+     icm_reads_hash::iterator isi;
 
      class_hash::const_iterator ci;
      for(ci = classifications.begin(); ci != classifications.end(); ci++) {
@@ -1000,12 +1013,12 @@ static void Read_Meta_ICMs()
 	  isi = ICM_Sequences.find(icm_file);
 	  if(isi == ICM_Sequences.end()) {
 	       // if unfound, make a new set and add
-	       seq_set icm_seqs;
-	       icm_seqs.insert(seq_header);
+	       vector<string> icm_seqs;
+	       icm_seqs.push_back(seq_header);
 	       ICM_Sequences[icm_file] = icm_seqs;
 	  } else {
 	       // if found, just add
-	       isi->second.insert(seq_header);
+	       isi->second.push_back(seq_header);
 	  }
      }
 }
