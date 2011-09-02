@@ -94,16 +94,17 @@ def main():
     # multiple iterations
     else:
         # make initial predictions using classifications only
-        start_time = time.time()
-        if options.long_orfs:
-            p = subprocess.Popen('%s -m %s.run1.icm -c %s %s %s %s.run1' % (g3_cmd, output_file, class_file, qual_str, sequence_file, output_file), shell=True)
-        else:
-            p = subprocess.Popen('%s -c %s %s %s %s.run1' % (g3_cmd, class_file, qual_str, sequence_file, output_file), shell=True)
-        os.waitpid(p.pid, 0)
-        if options.time:
-            f = open('time_%s_iter0.txt' % output_file, 'w')
-            print >> f, '%.3fs' % (time.time()-start_time)
-            f.close()
+        if not options.skip_first:
+            start_time = time.time()
+            if options.long_orfs:
+                p = subprocess.Popen('%s -m %s.run1.icm -c %s %s %s %s.run1' % (g3_cmd, output_file, class_file, qual_str, sequence_file, output_file), shell=True)
+            else:
+                p = subprocess.Popen('%s -c %s %s %s %s.run1' % (g3_cmd, class_file, qual_str, sequence_file, output_file), shell=True)
+            os.waitpid(p.pid, 0)
+            if options.time:
+                f = open('time_%s_iter0.txt' % output_file, 'w')
+                print >> f, '%.3fs' % (time.time()-start_time)
+                f.close()
 
         # no clustering
         if options.single_cluster:
@@ -159,6 +160,8 @@ def add_options(parser):
     parser.add_option('--all_features', dest='all_features', default=False, action='store_true', help=SUPPRESS_HELP)
     # time each successive step of the program
     parser.add_option('--time', dest='time', default=False, action='store_true', help=SUPPRESS_HELP)
+    # assume the first iteration has already been performed
+    parser.add_option('--skip_first', dest='skip_first', default=False, action='store_true', help=SUPPRESS_HELP)
 
     ############################################
     # glimmer-mg options
@@ -602,6 +605,7 @@ def repredict(g3_cmd, sequence_file, output_file, class_file, iterations, filter
             next_iter = output_file
 
         retrain(sequence_file, prev_iter, filter_t, all_features, indels)
+        print >> sys.stderr, '%s -b %s.motif -m %s.gicm -f %s.features.txt -c %s %s %s %s' % (g3_cmd, prev_iter, prev_iter, prev_iter, class_file, qual_str, sequence_file, next_iter)
         p = subprocess.Popen('%s -b %s.motif -m %s.gicm -f %s.features.txt -c %s %s %s %s' %
                   (g3_cmd, prev_iter, prev_iter, prev_iter, class_file, qual_str, sequence_file, next_iter), shell=True)
         os.waitpid(p.pid, 0)
