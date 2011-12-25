@@ -51,6 +51,7 @@ def main():
     parser.add_option('--rbs', dest='rbs', action='store_true', default=False, help='Just re-compute the RBS model [Default: %default]')
     parser.add_option('--icm', dest='icm', action='store_true', default=False, help='Just re-compute the gene ICM model [Default: %default]')
     parser.add_option('--indels', dest='indels', action='store_true', default=False, help='Gene predictions contain indels')
+    parser.add_option('--min_icm', dest='min_icm', type='int', default=0, help='Minimum bp required to train an ICM [Default: %default]')
     (options,args) = parser.parse_args()
 
     if options.mycoplas:
@@ -73,9 +74,9 @@ def main():
 
     if options.icm:
         if options.indels:
-            build_icm_indels(options.seq_file, options.predict_file, out_prefix)
+            build_icm_indels(options.seq_file, options.predict_file, out_prefix, options.min_icm)
         else:
-            build_icm(genes, seqs, hypothetical, out_prefix)
+            build_icm(genes, seqs, hypothetical, out_prefix, options.min_icm)
         if options.rbs:
             rbs_model(genes, seqs, hypothetical, out_prefix)
         return
@@ -103,14 +104,14 @@ def main():
         feature_file.close()
         rbs_model(genes, seqs, hypothetical, out_prefix)
         if options.indels:
-            build_icm_indels(options.seq_file, options.predict_file, out_prefix)
+            build_icm_indels(options.seq_file, options.predict_file, out_prefix, options.min_icm)
         else:
-            build_icm(genes, seqs, hypothetical, out_prefix)
+            build_icm(genes, seqs, hypothetical, out_prefix, options.min_icm)
     else:
         output_stats(out_prefix, gene_stats, 'gene', options.min_length, options.max_overlap)
         output_stats(out_prefix, nongene_stats, 'nongene', options.min_length, options.max_overlap)
         rbs_model(genes, seqs, hypothetical, out_prefix)
-        build_icm(genes, seqs, hypothetical, out_prefix)
+        build_icm(genes, seqs, hypothetical, out_prefix, options.min_icm)
         open('%s.gc.txt' % out_prefix, 'w').write('%f\n' % compute_gc(seqs))
 
 
@@ -717,9 +718,7 @@ def rbs_model(genes, seqs, hypothetical, out_prefix):
 #
 # Skip genes with frameshifts and hypothetical proteins
 ################################################################################
-def build_icm(genes, seqs, hypothetical, out_prefix):
-    icm_train_bp_t = 2000
-
+def build_icm(genes, seqs, hypothetical, out_prefix, icm_train_bp_t):
     gene_out = open('%s.gene.fasta' % out_prefix, 'w')
     bp_printed = 0
     for header in genes:
@@ -765,7 +764,8 @@ def build_icm(genes, seqs, hypothetical, out_prefix):
     if bp_printed >= icm_train_bp_t:
         if os.path.isfile('%s.gicm' % out_prefix):
             os.remove('%s.gicm' % out_prefix)
-        os.system('%s/build-icm -r %s.gicm < %s.gene.fasta' % (bin_dir, out_prefix,out_prefix))
+        p = subprocess.Popen('%s/build-icm -r %s.gicm < %s.gene.fasta' % (bin_dir, out_prefix,out_prefix), shell=True)
+        os.waitpid(p.pid,0)
     #os.remove('%s.gene.fasta' % out_prefix)
 
 
@@ -774,7 +774,7 @@ def build_icm(genes, seqs, hypothetical, out_prefix):
 #
 # Print gene sequence to file and train a 3-periodic ICM for gene prediction.
 ################################################################################
-def build_icm_indels(seq_file, predict_file, out_prefix):
+def build_icm_indels(seq_file, predict_file, out_prefix, icm_train_bp_t):
     # print gene sequences to file
     p = subprocess.Popen('%s/extract_aa.py -s %s -p %s -o %s' % (scripts_dir,seq_file,predict_file,out_prefix), shell=True)
     os.waitpid(p.pid, 0)
@@ -782,8 +782,14 @@ def build_icm_indels(seq_file, predict_file, out_prefix):
     os.remove('%s.faa' % out_prefix)
     os.rename('%s.ffn' % out_prefix, '%s.gene.fasta' % out_prefix)
 
-    p = subprocess.Popen('%s/build-icm -r %s.gicm < %s.gene.fasta' % (bin_dir,out_prefix,out_prefix), shell=True)
-    os.waitpid(p.pid, 0) 
+    bp_printed = 0
+    for line in open('%s.gene.fasta' % out_prefix):
+        if line[0] != '>':
+            bp_printed += len(line.rstrip())
+
+    if bp_printed >= icm_train_bp_t:
+        p = subprocess.Popen('%s/build-icm -r %s.gicm < %s.gene.fasta' % (bin_dir,out_prefix,out_prefix), shell=True)
+        os.waitpid(p.pid, 0) 
 
 
 ################################################################################

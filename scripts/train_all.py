@@ -39,7 +39,7 @@ def main():
             mo = ''
 
         if not options.undone or not os.path.isfile('%s.lengths.genes.txt' % gbk_file[:-4]):
-            cmd = '%s/train_features.py %s%s--gbk %s' % (scripts_dir, ml, mo, gbk_file)
+            cmd = '%s/train_features.py %s%s--gbk %s --min_icm 2000' % (scripts_dir, ml, mo, gbk_file)
 
             if options.condor:
                 cmds.append('runCmd -c "%s"' % cmd)
