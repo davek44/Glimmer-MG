@@ -116,6 +116,8 @@ def main():
     if install_glimmer:
         # compile
         os.chdir('src')
+        p = subprocess.Popen('sed \'s/static string ICM_dir = "[a-zA-Z0-9./]*"/static string ICM_dir = %s/phymm/.genomeData/\'' % install_dir, shell=True)
+        os.waitpid(p.pid,0)
         p = subprocess.Popen('make clean; make', shell=True)
         os.waitpid(p.pid,0)
         os.chdir('..')
