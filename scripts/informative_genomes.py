@@ -28,7 +28,7 @@ def main():
         genome_pre = gbk_file[:-4]
         informative = True
 
-        if not os.path.isfile('%s.gene.icm' % genome_pre):
+        if not os.path.isfile('%s.gicm' % genome_pre):
             informative = False
 
         adjs = 0.0
