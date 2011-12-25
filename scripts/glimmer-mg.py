@@ -114,7 +114,7 @@ def main():
         else:
             if not options.clust_done:
                 # cluster reads
-                phymm_results_file = 'results.01.phymm_%s.txt' % sequence_file.replace('.','_')
+                phymm_results_file = 'results.01.phymm_%s.txt' % os.path.split(sequence_file)[1].replace('.','_')
                 p = subprocess.Popen('%s -s %s -p %d -r %s --taxlevel %s --minbp_pct %f' % (physcimm_bin, sequence_file, options.proc, phymm_results_file, options.taxlevel, options.minbp_pct), shell=True)
                 os.waitpid(p.pid, 0)
 
@@ -533,7 +533,7 @@ def parse_phymm(sequence_file, top_hits, ignore):
     for line in open('%s/../data/informative_genomes.txt' % scripts_dir):
         informative_genomes.add(line.rstrip())
 
-    raw_file = 'rawPhymmOutput_%s.txt' % sequence_file.replace('.','_')
+    raw_file = 'rawPhymmOutput_%s.txt' % os.path.split(sequence_file)[1].replace('.','_')
     if os.path.isfile(raw_file):
         raw_open = open(raw_file)
     elif os.path.isfile(raw_file+'.gz'):
