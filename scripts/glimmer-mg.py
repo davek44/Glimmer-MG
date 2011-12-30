@@ -127,7 +127,7 @@ def main():
             for clust_sequence_file in glob.glob('cluster*fa'):
                 cluster_repredict(g3_cmd, clust_sequence_file, class_file, output_file, options.iterate, options.filter_t, options.all_features, options.indel, options.quality_file)
                 combine_predictions(predict_out, sequence_scores, clust_sequence_file, output_file)
-                cluster_clean(clust_sequence_file, output_file)
+                cluster_clean(clust_sequence_file, output_file, options.iterate)
             predict_out.close()
 
     if options.time:
@@ -226,18 +226,25 @@ def classify(scores, genomes, top_hits):
 #
 # Delete uninteresting temporary files. Assumes one iteration.
 ################################################################################
-def cluster_clean(clust_sequence_file, all_output_file):
+def cluster_clean(clust_sequence_file, all_output_file, iterations):
     output_file = '%s.%s' % (all_output_file, clust_sequence_file[:-3])
 
     os.remove('%s.class.txt' % output_file)
-    os.remove('%s.predict' % output_file)
-    os.remove('%s.run1.features.txt' % output_file)
-    os.remove('%s.run1.fpredict' % output_file)
-    os.remove('%s.run1.gene.fasta' % output_file)
-    os.remove('%s.run1.gicm' % output_file)
-    os.remove('%s.run1.motif' % output_file)
-    os.remove('%s.run1.predict' % output_file)
 
+    # may not have been generated if training data was sparse
+    if os.path.isfile('%s.predict' % output_file):
+        os.remove('%s.predict' % output_file)
+        for i in range(1,iterations+1):
+            os.remove('%s.run%d.features.txt' % (output_file,i))
+            os.remove('%s.run%d.fpredict' % (output_file,i))
+            os.remove('%s.run%d.gene.fasta' % (output_file,i))
+            os.remove('%s.run%d.gicm' % (output_file,i))
+            os.remove('%s.run%d.motif' % (output_file,i))
+            os.remove('%s.run%d.predict' % (output_file,i))
+    else:
+        # still made
+        os.remove('%s.run1.predict' % output_file)
+            
 
 ################################################################################
 # cluster_repredict
@@ -267,6 +274,7 @@ def cluster_repredict(g3_cmd, sequence_file, all_class_file, all_output_file, it
     predict_file = '%s.run1.predict' % output_file
     predict_out = open(predict_file, 'w')
     print_seq = False
+    num_predictions = 0
     for line in open(all_predict_file):
         if line[0] == '>':
             header = line[1:].split()[0]
@@ -276,6 +284,8 @@ def cluster_repredict(g3_cmd, sequence_file, all_class_file, all_output_file, it
                 print_seq = False
         if print_seq:
             print >> predict_out, line,
+            if line[0] != '>':
+                num_predictions += 1
     predict_out.close()
 
     # make cluster quality file
@@ -285,8 +295,10 @@ def cluster_repredict(g3_cmd, sequence_file, all_class_file, all_output_file, it
     else:
         qual_str = ''
 
-    # repredict
-    repredict(g3_cmd, sequence_file, output_file, class_file, iterations, filter_t, all_features, indels, qual_str)
+    # if enough data, repredict
+    if num_predictions > 10:
+        repredict(g3_cmd, sequence_file, output_file, class_file, iterations, filter_t, all_features, indels, qual_str)
+    # else, it will just use initial
 
 
 ################################################################################
@@ -304,15 +316,20 @@ def combine_predictions(predict_out, sequence_scores, clust_sequence_file, all_o
     # check for sufficient training data
     all_init = False
     gene_bp = 0
-    for line in open('%s.run1.gene.fasta' % output_file):
-        if line[0] != '>':
-            gene_bp += len(line.rstrip())
+
+    # if file doesn't exist, there were too few sequences to even train
+    if os.path.isfile('%s.run1.gene.fasta' % output_file):        
+        for line in open('%s.run1.gene.fasta' % output_file):
+            if line[0] != '>':
+                gene_bp += len(line.rstrip())
     if gene_bp < min_gene_bp:
         # print initial only
         for line in open('%s.run1.predict' % output_file):
             print >> predict_out, line,
 
     else:
+        print 'Enough %s' % predict_out
+
         # get sequence lengths
         seq_lengths = {}
         for line in open(clust_sequence_file):

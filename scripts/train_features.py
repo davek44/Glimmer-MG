@@ -706,8 +706,18 @@ def rbs_model(genes, seqs, hypothetical, out_prefix):
     rbs_out.close()
 
     # elph
-    p = subprocess.Popen('%s %s.rbs.upstream LEN=6 2> /dev/null | %s/get-motif-counts.awk > %s.motif' % (elph_bin, out_prefix, scripts_dir, out_prefix), shell=True)
-    os.waitpid(p.pid, 0)
+    if os.path.getsize('%s.rbs.upstream' % out_prefix) > 0:
+        p = subprocess.Popen('%s %s.rbs.upstream LEN=6 2> /dev/null | %s/get-motif-counts.awk > %s.motif' % (elph_bin, out_prefix, scripts_dir, out_prefix), shell=True)
+        os.waitpid(p.pid, 0)
+    else:
+        motif_out = open('%s.motif' % out_prefix, 'w')
+        cols = (1, 1, 1, 1, 1, 1)
+        print >> motif_out, '6'
+        print >> motif_out, 'a %7d %7d %7d %7d %7d %7d' % cols
+        print >> motif_out, 'c %7d %7d %7d %7d %7d %7d' % cols
+        print >> motif_out, 'g %7d %7d %7d %7d %7d %7d' % cols
+        print >> motif_out, 't %7d %7d %7d %7d %7d %7d' % cols
+        motif_out.close()
     os.remove('%s.rbs.upstream' % out_prefix)
 
 
