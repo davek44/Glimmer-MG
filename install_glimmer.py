@@ -49,15 +49,14 @@ def main():
             os.chdir('..')
 
     ############################################
-    # Scimm
+    # PhyScimm
     ############################################
     if install_scimm:
         # unzip
         if not os.path.isdir('scimm'):
             scimm_ver = glob.glob('scimm*tar.gz')[0][:-7]
-            p = subprocess.Popen('tar -xzvf %s.tar.gz' % scimm_ver)
+            p = subprocess.Popen('tar -xzvf %s.tar.gz' % scimm_ver, shell=True)
             os.waitpid(p.pid, 0)
-            os.rename(scimm_ver, 'scimm')
 
         os.chdir('scimm')
 
@@ -75,14 +74,14 @@ def main():
             os.symlink('../glimmer3.02/bin/build-icm', 'bin/build-icm')
 
         # set scimm bin variable
-        p = subprocess.Popen('sed \'s,scimm_bin = "[a-zA-Z/]*",scimm_bin = "%s/bin",\' bin/scimm.py > sc.tmp' % installdir, shell=True)
+        p = subprocess.Popen('sed \'s,scimm_bin = ".*",scimm_bin = "%s/scimm/bin",\' bin/scimm.py > sc.tmp' % installdir, shell=True)
         os.waitpid(p.pid, 0)
         os.rename('sc.tmp', 'bin/scimm.py')
         p = subprocess.Popen('chmod ug+x bin/scimm.py', shell=True)
         os.waitpid(p.pid,0)
 
         # set physcimm bin variable
-        p = subprocess.Popen('sed \'s,phymmdir = "[a-zA-Z/]*",phymmdir = "%s/phymm",\' bin/physcimm.py ph.tmp' % installdir, shell=True)
+        p = subprocess.Popen('sed \'s,phymmdir = ".*",phymmdir = "%s/phymm",\' bin/physcimm.py > ph.tmp' % installdir, shell=True)
         os.waitpid(p.pid, 0)
         os.rename('ph.tmp', 'bin/physcimm.py')
         p = subprocess.Popen('chmod ug+x bin/physcimm.py', shell=True)
@@ -116,8 +115,9 @@ def main():
     if install_glimmer:
         # compile
         os.chdir('src')
-        p = subprocess.Popen('sed \'s/static string ICM_dir = "[a-zA-Z0-9./]*"/static string ICM_dir = %s/phymm/.genomeData/\'' % install_dir, shell=True)
+        p = subprocess.Popen('sed \'s/static string ICM_dir = ".*"/static string ICM_dir = "%s\/phymm\/.genomeData"/\' Glimmer/glimmer-mg.cc > glim.tmp' % installdir.replace('/','\/'), shell=True)
         os.waitpid(p.pid,0)
+        os.rename('glim.tmp','Glimmer/glimmer-mg.cc')
         p = subprocess.Popen('make clean; make', shell=True)
         os.waitpid(p.pid,0)
         os.chdir('..')
