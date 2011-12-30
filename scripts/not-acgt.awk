@@ -1,4 +1,4 @@
-#!/bin/awk -f
+#!/usr/bin/awk -f
 # Usage:  not-acgt.awk
 #   Read a fasta input file and find regions consisting of MIN_RUN
 #   or more consecutive non-acgt characters in the first string.

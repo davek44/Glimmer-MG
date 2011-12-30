@@ -1,4 +1,4 @@
-#!/bin/awk -f
+#!/usr/bin/awk -f
 # Usage:  glim-diff.awk  <a-pred> <b-pred>
 #   Read gene predictions in <a-pred> and <b-pred>
 #   and output them side by side.  Both must be

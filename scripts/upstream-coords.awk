@@ -1,4 +1,4 @@
-#!/bin/awk -f
+#!/usr/bin/awk -f
 # Usage:  upstream-coords.awk  <len>  <separation>
 #   Read gene prediction coordinates from standard input
 #   and output the coordinates of the region of length
