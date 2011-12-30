@@ -144,7 +144,7 @@ static bool User_ICM = false;
 static bool User_Stop = false;
   // Indicator variables to decide what the user has specified versus
   // what should be taken from classifications
-static string ICM_dir = "/fs/szasmg3/dakelley/phymm3/.genomeData";
+static string ICM_dir = "/Users/dk/research/umd/glimmer-mg/software/Glimmer-MG/phymm/.genomeData";
   // ICM directories
 static vector<int> Fwd_Prev_Stops;
   // Saved positions of the previous forward stop codon for each sequence position
