@@ -328,8 +328,6 @@ def combine_predictions(predict_out, sequence_scores, clust_sequence_file, all_o
             print >> predict_out, line,
 
     else:
-        print 'Enough %s' % predict_out
-
         # get sequence lengths
         seq_lengths = {}
         for line in open(clust_sequence_file):
