@@ -327,6 +327,8 @@ int  main
 	  while (!end_of_reads)
 	  {
 	       Read_Indexes.clear();
+	       if(User_ICM)
+		 ICM_Sequences[string(ICM_File_Name)].clear();
 
 	       // read in chunk of sequences
 	       for(chunk_i = 0; !end_of_reads && chunk_i < Chunk_Sequences; chunk_i++)
@@ -346,6 +348,8 @@ int  main
 		    else {
 			 pre_list[chunk_i] = split(hdr_list[chunk_i])[0];
 			 Read_Indexes[pre_list[chunk_i]] = chunk_i;
+			 if(User_ICM)
+			   ICM_Sequences[string(ICM_File_Name)].push_back(pre_list[chunk_i]);
 		    }
 		    if(Quality_File_Name != NULL)
 			 Fasta_Qual_Vec_Read(quality_fp, qual_list[chunk_i], header);
@@ -358,7 +362,7 @@ int  main
 	       {
 		    // read it here meta or not
 		    Gene_ICM.Read((char*)icm_map_it->first.c_str());
-
+		    
 		    // for each read in the ICM's vector
 		    for(r = 0; r < icm_map_it->second.size(); r++)
 		    {
