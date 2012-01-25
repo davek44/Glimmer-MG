@@ -2012,7 +2012,7 @@ int  Subscript
 //  model) for character  ch .
 
   {
-   char  * p;
+   const char  * p;
 
    p = strchr (ALPHA_STRING, tolower (Filter (ch)));
    //p = strchr (ALPHA_STRING, ch);

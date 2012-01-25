@@ -1002,7 +1002,7 @@ int  Char_Sub
 //  Return a subscript corresponding to character  ch .
 
   {
-   char  * p;
+   const char  * p;
 
    p = strchr (CONVERSION_STRING, tolower (ch));
    if  (p == NULL)
