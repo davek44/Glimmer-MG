@@ -57,10 +57,10 @@ in the distribution.
 following instructions assume a Linux system.  They also work under
 Mac OSX.
 
-To install \Gmg{}, download the compressed tarfile
-\,\verb`glimmer-mg-1.0.1.tar.gz`\,
-from the website.  Then uncompress the file by typing
-\BSV
+To install \Gmg{}, first, download and install BioPython
+(http://biopython.org/wiki/Biopython). Then, download the compressed
+tarfile \,\verb`glimmer-mg-1.0.1.tar.gz`\, from the website.  Then
+uncompress the file by typing \BSV
 \begin{verbatim}
   tar xzf glimmer-mg.1.0.1.tar.gz
 \end{verbatim}
@@ -81,7 +81,7 @@ compile the \Gmg{} code. More specifically, it will
   Gb of disk space and takes about $\sim24$ hours to build. If you
   already have \,\verb`Phymm`\, installed, you need only set the
   variable \Desc{prior\_phymm\_dir} in \,\verb`install_glimmer.py`\, to
-  its installation directory.
+  its installation directory and set \Desc{install\_phymm} to False.
 
 \item Download, compile, and install \,\verb`Scimm`\,
 
