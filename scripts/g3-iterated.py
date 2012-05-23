@@ -71,7 +71,7 @@ def main():
     # step 6
     # Run second Glimmer
     print 'Step 6 of %d: Running second Glimmer3' % num_steps
-    cmd = '%s/glimmer3 %s -F %s.run1.features.txt -b %s.run1.motif -m %s.run1.gicm %s %s.run2' % (bin_dir, options.glimmeropts, tag, tag, tag, genome_file, tag)
+    cmd = '%s/glimmer3 %s -f %s.run1.features.txt -b %s.run1.motif -m %s.run1.gicm %s %s.run2' % (bin_dir, options.glimmeropts, tag, tag, tag, genome_file, tag)
     print cmd
     p = subprocess.Popen(cmd, shell=True)
     os.waitpid(p.pid,0)
@@ -87,7 +87,7 @@ def main():
     # step 8
     # Run third Glimmer
     print 'Step 8 of %d: Running third Glimmer3' % num_steps
-    cmd = '%s/glimmer3 %s -F %s.run2.features.txt -b %s.run2.motif -m %s.run2.gicm %s %s.run2' % (bin_dir, options.glimmeropts, tag, tag, tag, genome_file, tag)
+    cmd = '%s/glimmer3 %s -f %s.run2.features.txt -b %s.run2.motif -m %s.run2.gicm %s %s.run2' % (bin_dir, options.glimmeropts, tag, tag, tag, genome_file, tag)
     print cmd
     p = subprocess.Popen(cmd, shell=True)
     os.waitpid(p.pid,0)
