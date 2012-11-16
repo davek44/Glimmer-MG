@@ -35,15 +35,15 @@ def main():
             os.chdir('phymm')
 
             # download
-            p = subprocess.Popen('curl -o phymmInstaller.tar.gz http://www.cbcb.umd.edu/software/phymm/phymmInstaller.tar.gz', shell=True)
+            p = subprocess.Popen('curl -o phymmbl_installer.tar.gz http://www.cbcb.umd.edu/software/phymm/phymmbl_installer.tar.gz', shell=True)
             os.waitpid(p.pid, 0)
 
             # unzip
-            p = subprocess.Popen('tar -xzvf phymmInstaller.tar.gz', shell=True)
+            p = subprocess.Popen('tar -xzvf phymmbl_installer.tar.gz', shell=True)
             os.waitpid(p.pid, 0)
 
             # install
-            p = subprocess.Popen('./phymmSetup.pl', shell=True)
+            p = subprocess.Popen('./phymmblSetup.pl', shell=True)
             os.waitpid(p.pid, 0)
 
             os.chdir('..')
