@@ -28,24 +28,23 @@ def main():
         genome_pre = gbk_file[:-4]
         informative = True
 
-        if not os.path.isfile('%s.gicm' % genome_pre):
-            informative = False
+        if os.path.isfile('%s.gicm' % genome_pre):
+            adjs = 0.0
+            for line in open('%s.adj_dist.1.-1.genes.txt' % genome_pre):
+                adjs += float(line.split()[1])
+            if adjs < min_adj:
+                informative = False
 
-        adjs = 0.0
-        for line in open('%s.adj_dist.1.-1.genes.txt' % genome_pre):
-            adjs += float(line.split()[1])
-        if adjs < min_adj:
-            informative = False
+            adjs = 0.0
+            for line in open('%s.adj_dist.-1.1.genes.txt' % genome_pre):
+                adjs += float(line.split()[1])
+            if adjs < min_adj:
+                informative = False
 
-        adjs = 0.0
-        for line in open('%s.adj_dist.-1.1.genes.txt' % genome_pre):
-            adjs += float(line.split()[1])
-        if adjs < min_adj:
-            informative = False
+            if informative:
+                (strain, nc_num) = genome_pre.split('/')[-2:]
+                print >> inform_open, '%s|%s' % (strain,nc_num)
 
-        if informative:
-            (strain, nc_num) = genome_pre.split('/')[-2:]
-            print >> inform_open, '%s|%s' % (strain,nc_num)
     inform_open.close()
 
 
